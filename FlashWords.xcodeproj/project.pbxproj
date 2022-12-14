@@ -15,9 +15,12 @@
 		A9F9DCBD294A63ED00055BEF /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A9F9DCBC294A63ED00055BEF /* SnapKit */; };
 		A9F9DCC0294A641C00055BEF /* SwiftExtension in Frameworks */ = {isa = PBXBuildFile; productRef = A9F9DCBF294A641C00055BEF /* SwiftExtension */; };
 		A9F9DCC3294A64AD00055BEF /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCC2294A64AD00055BEF /* Fonts.swift */; };
+		D57C574DEDE1017976FF0E6F /* Pods_FlashWords.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.release.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.release.xcconfig"; sourceTree = "<group>"; };
+		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F9DCA4294A623100055BEF /* FlashWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F9DCA7294A623100055BEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9F9DCA9294A623100055BEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -26,6 +29,7 @@
 		A9F9DCB3294A623300055BEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A9F9DCB5294A623300055BEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9F9DCC2294A64AD00055BEF /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		DFDBDC7D6AB252E63F4FA1AB /* Pods-FlashWords.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.debug.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -35,17 +39,38 @@
 			files = (
 				A9F9DCC0294A641C00055BEF /* SwiftExtension in Frameworks */,
 				A9F9DCBD294A63ED00055BEF /* SnapKit in Frameworks */,
+				D57C574DEDE1017976FF0E6F /* Pods_FlashWords.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		71B7C62BFBB80EB9F0FDD2B6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				DFDBDC7D6AB252E63F4FA1AB /* Pods-FlashWords.debug.xcconfig */,
+				A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		9C4E96C2F571ED3CE5940603 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A9F9DC9B294A623100055BEF = {
 			isa = PBXGroup;
 			children = (
 				A9F9DCA6294A623100055BEF /* FlashWords */,
 				A9F9DCA5294A623100055BEF /* Products */,
+				71B7C62BFBB80EB9F0FDD2B6 /* Pods */,
+				9C4E96C2F571ED3CE5940603 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -102,6 +127,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9F9DCB8294A623300055BEF /* Build configuration list for PBXNativeTarget "FlashWords" */;
 			buildPhases = (
+				F5BD3C24722A65D220231D7C /* [CP] Check Pods Manifest.lock */,
 				A9F9DCA0294A623100055BEF /* Sources */,
 				A9F9DCA1294A623100055BEF /* Frameworks */,
 				A9F9DCA2294A623100055BEF /* Resources */,
@@ -144,7 +170,7 @@
 			);
 			mainGroup = A9F9DC9B294A623100055BEF;
 			packageReferences = (
-				A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */,
 				A9F9DCBE294A641C00055BEF /* XCRemoteSwiftPackageReference "Extensions" */,
 			);
 			productRefGroup = A9F9DCA5294A623100055BEF /* Products */;
@@ -167,6 +193,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F5BD3C24722A65D220231D7C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FlashWords-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		A9F9DCA0294A623100055BEF /* Sources */ = {
@@ -310,6 +361,7 @@
 		};
 		A9F9DCB9294A623300055BEF /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DFDBDC7D6AB252E63F4FA1AB /* Pods-FlashWords.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -341,6 +393,7 @@
 		};
 		A9F9DCBA294A623300055BEF /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -394,7 +447,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -415,7 +468,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		A9F9DCBC294A63ED00055BEF /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */;
 			productName = SnapKit;
 		};
 		A9F9DCBF294A641C00055BEF /* SwiftExtension */ = {
