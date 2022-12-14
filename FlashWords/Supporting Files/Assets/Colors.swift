@@ -20,6 +20,9 @@ internal typealias AssetColorTypeAlias = ColorAsset.Color
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
   internal static let hex000000 = ColorAsset(name: "hex000000")
+  internal static let hex1D1C21 = ColorAsset(name: "hex1D1C21")
+  internal static let hex2E2C32 = ColorAsset(name: "hex2E2C32")
+  internal static let hexF2F2F2 = ColorAsset(name: "hexF2F2F2")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
 

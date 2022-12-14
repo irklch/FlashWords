@@ -9,10 +9,16 @@
 /* Begin PBXBuildFile section */
 		A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9C152F7294A6BC6004A0662 /* Colors.xcassets */; };
 		A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FA294A6FB3004A0662 /* Colors.swift */; };
+		A9C152FD294A7613004A0662 /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FC294A7613004A0662 /* Titles.swift */; };
+		A9C15306294A7C25004A0662 /* Avenir.ttc in Resources */ = {isa = PBXBuildFile; fileRef = A9C15305294A7C25004A0662 /* Avenir.ttc */; };
+		A9C1530A294A8386004A0662 /* Avenir Black.ttc in Resources */ = {isa = PBXBuildFile; fileRef = A9C15309294A8386004A0662 /* Avenir Black.ttc */; };
+		A9C1530C294A868A004A0662 /* Images.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C1530B294A868A004A0662 /* Images.swift */; };
+		A9C1530E294A9252004A0662 /* WordItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C1530D294A9252004A0662 /* WordItemCell.swift */; };
+		A9C15311294A9283004A0662 /* WordItemCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C15310294A9283004A0662 /* WordItemCellViewModel.swift */; };
 		A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCA7294A623100055BEF /* AppDelegate.swift */; };
 		A9F9DCAA294A623100055BEF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCA9294A623100055BEF /* SceneDelegate.swift */; };
 		A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCAB294A623100055BEF /* WordListCollectionVC.swift */; };
-		A9F9DCB1294A623300055BEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9F9DCB0294A623300055BEF /* Assets.xcassets */; };
+		A9F9DCB1294A623300055BEF /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9F9DCB0294A623300055BEF /* Images.xcassets */; };
 		A9F9DCB4294A623300055BEF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A9F9DCB2294A623300055BEF /* LaunchScreen.storyboard */; };
 		A9F9DCBD294A63ED00055BEF /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A9F9DCBC294A63ED00055BEF /* SnapKit */; };
 		A9F9DCC0294A641C00055BEF /* SwiftExtension in Frameworks */ = {isa = PBXBuildFile; productRef = A9F9DCBF294A641C00055BEF /* SwiftExtension */; };
@@ -25,11 +31,17 @@
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9C152F7294A6BC6004A0662 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A9C152FA294A6FB3004A0662 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		A9C152FC294A7613004A0662 /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
+		A9C15305294A7C25004A0662 /* Avenir.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = Avenir.ttc; sourceTree = "<group>"; };
+		A9C15309294A8386004A0662 /* Avenir Black.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Avenir Black.ttc"; sourceTree = "<group>"; };
+		A9C1530B294A868A004A0662 /* Images.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Images.swift; sourceTree = "<group>"; };
+		A9C1530D294A9252004A0662 /* WordItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordItemCell.swift; sourceTree = "<group>"; };
+		A9C15310294A9283004A0662 /* WordItemCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordItemCellViewModel.swift; sourceTree = "<group>"; };
 		A9F9DCA4294A623100055BEF /* FlashWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F9DCA7294A623100055BEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9F9DCA9294A623100055BEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A9F9DCAB294A623100055BEF /* WordListCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListCollectionVC.swift; sourceTree = "<group>"; };
-		A9F9DCB0294A623300055BEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		A9F9DCB0294A623300055BEF /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		A9F9DCB3294A623300055BEF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A9F9DCB5294A623300055BEF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A9F9DCC2294A64AD00055BEF /* Fonts.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
@@ -70,11 +82,29 @@
 		A9C152F9294A6F63004A0662 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
-				A9F9DCB0294A623300055BEF /* Assets.xcassets */,
+				A9F9DCB0294A623300055BEF /* Images.xcassets */,
 				A9C152F7294A6BC6004A0662 /* Colors.xcassets */,
 				A9C152FA294A6FB3004A0662 /* Colors.swift */,
 			);
 			path = Assets;
+			sourceTree = "<group>";
+		};
+		A9C152FE294A775A004A0662 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				A9C15305294A7C25004A0662 /* Avenir.ttc */,
+				A9C15309294A8386004A0662 /* Avenir Black.ttc */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		A9C1530F294A9256004A0662 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A9C1530D294A9252004A0662 /* WordItemCell.swift */,
+				A9C15310294A9283004A0662 /* WordItemCellViewModel.swift */,
+			);
+			path = Cell;
 			sourceTree = "<group>";
 		};
 		A9F9DC9B294A623100055BEF = {
@@ -109,6 +139,8 @@
 			isa = PBXGroup;
 			children = (
 				A9F9DCC2294A64AD00055BEF /* Fonts.swift */,
+				A9C152FC294A7613004A0662 /* Titles.swift */,
+				A9C1530B294A868A004A0662 /* Images.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -119,6 +151,7 @@
 				A9F9DCA7294A623100055BEF /* AppDelegate.swift */,
 				A9F9DCA9294A623100055BEF /* SceneDelegate.swift */,
 				A9C152F9294A6F63004A0662 /* Assets */,
+				A9C152FE294A775A004A0662 /* Fonts */,
 				A9F9DCB2294A623300055BEF /* LaunchScreen.storyboard */,
 				A9F9DCB5294A623300055BEF /* Info.plist */,
 			);
@@ -128,6 +161,7 @@
 		A9F9DCC5294A64C400055BEF /* WordListCollectionVC */ = {
 			isa = PBXGroup;
 			children = (
+				A9C1530F294A9256004A0662 /* Cell */,
 				A9F9DCAB294A623100055BEF /* WordListCollectionVC.swift */,
 			);
 			path = WordListCollectionVC;
@@ -201,8 +235,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */,
+				A9C1530A294A8386004A0662 /* Avenir Black.ttc in Resources */,
+				A9C15306294A7C25004A0662 /* Avenir.ttc in Resources */,
 				A9F9DCB4294A623300055BEF /* LaunchScreen.storyboard in Resources */,
-				A9F9DCB1294A623300055BEF /* Assets.xcassets in Resources */,
+				A9F9DCB1294A623300055BEF /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,10 +274,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9C1530E294A9252004A0662 /* WordItemCell.swift in Sources */,
+				A9C1530C294A868A004A0662 /* Images.swift in Sources */,
+				A9C152FD294A7613004A0662 /* Titles.swift in Sources */,
 				A9F9DCC3294A64AD00055BEF /* Fonts.swift in Sources */,
 				A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */,
 				A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */,
 				A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */,
+				A9C15311294A9283004A0662 /* WordItemCellViewModel.swift in Sources */,
 				A9F9DCAA294A623100055BEF /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
