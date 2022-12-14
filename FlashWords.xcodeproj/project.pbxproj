@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9C152F7294A6BC6004A0662 /* Colors.xcassets */; };
+		A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FA294A6FB3004A0662 /* Colors.swift */; };
 		A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCA7294A623100055BEF /* AppDelegate.swift */; };
 		A9F9DCAA294A623100055BEF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCA9294A623100055BEF /* SceneDelegate.swift */; };
 		A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9F9DCAB294A623100055BEF /* WordListCollectionVC.swift */; };
@@ -21,6 +23,8 @@
 /* Begin PBXFileReference section */
 		A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.release.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.release.xcconfig"; sourceTree = "<group>"; };
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9C152F7294A6BC6004A0662 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		A9C152FA294A6FB3004A0662 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A9F9DCA4294A623100055BEF /* FlashWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FlashWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9F9DCA7294A623100055BEF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A9F9DCA9294A623100055BEF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,7 +56,6 @@
 				DFDBDC7D6AB252E63F4FA1AB /* Pods-FlashWords.debug.xcconfig */,
 				A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -62,6 +65,16 @@
 				A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A9C152F9294A6F63004A0662 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				A9F9DCB0294A623300055BEF /* Assets.xcassets */,
+				A9C152F7294A6BC6004A0662 /* Colors.xcassets */,
+				A9C152FA294A6FB3004A0662 /* Colors.swift */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 		A9F9DC9B294A623100055BEF = {
@@ -105,7 +118,7 @@
 			children = (
 				A9F9DCA7294A623100055BEF /* AppDelegate.swift */,
 				A9F9DCA9294A623100055BEF /* SceneDelegate.swift */,
-				A9F9DCB0294A623300055BEF /* Assets.xcassets */,
+				A9C152F9294A6F63004A0662 /* Assets */,
 				A9F9DCB2294A623300055BEF /* LaunchScreen.storyboard */,
 				A9F9DCB5294A623300055BEF /* Info.plist */,
 			);
@@ -170,7 +183,7 @@
 			);
 			mainGroup = A9F9DC9B294A623100055BEF;
 			packageReferences = (
-				A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */,
+				A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */,
 				A9F9DCBE294A641C00055BEF /* XCRemoteSwiftPackageReference "Extensions" */,
 			);
 			productRefGroup = A9F9DCA5294A623100055BEF /* Products */;
@@ -187,6 +200,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */,
 				A9F9DCB4294A623300055BEF /* LaunchScreen.storyboard in Resources */,
 				A9F9DCB1294A623300055BEF /* Assets.xcassets in Resources */,
 			);
@@ -225,6 +239,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A9F9DCC3294A64AD00055BEF /* Fonts.swift in Sources */,
+				A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */,
 				A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */,
 				A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */,
 				A9F9DCAA294A623100055BEF /* SceneDelegate.swift in Sources */,
@@ -447,7 +462,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
+		A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -468,7 +483,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		A9F9DCBC294A63ED00055BEF /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */;
+			package = A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */;
 			productName = SnapKit;
 		};
 		A9F9DCBF294A641C00055BEF /* SwiftExtension */ = {

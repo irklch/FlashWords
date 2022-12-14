@@ -13,7 +13,7 @@ final class WordListCollectionVC: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = "Мой плейлист"
         titleLabel.font = .systemBold16
-        titleLabel.textColor = .red
+        titleLabel.textColor = Asset.hex000000.color
         return titleLabel
     }()
     

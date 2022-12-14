@@ -1,0 +1,6 @@
+ xcassets:
+   inputs:
+     - Assets/Colors.xcassets
+   outputs:
+     - templateName: swift5
+       output: Assets/Colors.swift
