@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73C294E0B2E0025118C /* String+Sizes.swift */; };
 		A92FE740294E0C510025118C /* WordListCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */; };
+		A92FE742294E748D0025118C /* UIViewController+KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */; };
+		A92FE744294E7F570025118C /* Avenir Medium.ttc in Resources */ = {isa = PBXBuildFile; fileRef = A92FE743294E7F570025118C /* Avenir Medium.ttc */; };
+		A92FE746294E82CB0025118C /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE745294E82CB0025118C /* Symbols.swift */; };
 		A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9C152F7294A6BC6004A0662 /* Colors.xcassets */; };
 		A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FA294A6FB3004A0662 /* Colors.swift */; };
 		A9C152FD294A7613004A0662 /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FC294A7613004A0662 /* Titles.swift */; };
@@ -33,6 +36,9 @@
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A92FE73C294E0B2E0025118C /* String+Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Sizes.swift"; sourceTree = "<group>"; };
 		A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListCollectionViewModel.swift; sourceTree = "<group>"; };
+		A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KeyboardDismiss.swift"; sourceTree = "<group>"; };
+		A92FE743294E7F570025118C /* Avenir Medium.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Avenir Medium.ttc"; sourceTree = "<group>"; };
+		A92FE745294E82CB0025118C /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
 		A9C152F7294A6BC6004A0662 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A9C152FA294A6FB3004A0662 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A9C152FC294A7613004A0662 /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
@@ -89,6 +95,7 @@
 				A9F9DCC2294A64AD00055BEF /* Fonts.swift */,
 				A9C152FC294A7613004A0662 /* Titles.swift */,
 				A9C1530B294A868A004A0662 /* Images.swift */,
+				A92FE745294E82CB0025118C /* Symbols.swift */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -97,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				A92FE73C294E0B2E0025118C /* String+Sizes.swift */,
+				A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -116,6 +124,7 @@
 			children = (
 				A9C15305294A7C25004A0662 /* Avenir.ttc */,
 				A9C15309294A8386004A0662 /* Avenir Black.ttc */,
+				A92FE743294E7F570025118C /* Avenir Medium.ttc */,
 			);
 			path = Fonts;
 			sourceTree = "<group>";
@@ -258,6 +267,7 @@
 			files = (
 				A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */,
 				A9C1530A294A8386004A0662 /* Avenir Black.ttc in Resources */,
+				A92FE744294E7F570025118C /* Avenir Medium.ttc in Resources */,
 				A9C15306294A7C25004A0662 /* Avenir.ttc in Resources */,
 				A9F9DCB4294A623300055BEF /* LaunchScreen.storyboard in Resources */,
 				A9F9DCB1294A623300055BEF /* Images.xcassets in Resources */,
@@ -302,7 +312,9 @@
 				A9F9DCC3294A64AD00055BEF /* Fonts.swift in Sources */,
 				A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */,
 				A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */,
+				A92FE742294E748D0025118C /* UIViewController+KeyboardDismiss.swift in Sources */,
 				A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */,
+				A92FE746294E82CB0025118C /* Symbols.swift in Sources */,
 				A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */,
 				A92FE740294E0C510025118C /* WordListCollectionViewModel.swift in Sources */,
 				A9C15311294A9283004A0662 /* WordItemCellViewModel.swift in Sources */,

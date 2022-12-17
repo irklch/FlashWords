@@ -14,5 +14,6 @@ extension UIFont {
     static let avenirBold36: UIFont = (UIFont.init(name: "Avenir Black", size: 36)).nonOptional(.systemRegular16)
     static let avenirRegular12: UIFont = (UIFont.init(name: "Avenir", size: 12)).nonOptional(.systemRegular16)
     static let avenirRegular16: UIFont = (UIFont.init(name: "Avenir", size: 16)).nonOptional(.systemRegular16)
+    static let avenirMedium16: UIFont = (UIFont.init(name: "Avenir Medium", size: 16)).nonOptional(.systemRegular16)
 
 }

@@ -6,7 +6,7 @@
 	<array>
 		<string>Avenir.ttc</string>
 		<string>Avenir Black.ttc</string>
-		<string>AvenirBold.ttc</string>
+		<string>Avenir Medium.ttc</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

@@ -23,7 +23,7 @@ final class WordItemCell: UICollectionViewCell {
     private lazy var arrowImageView: UIImageView = {
         let arrowImageView = UIImageView()
         arrowImageView.image = Images.arrow
-        arrowImageView.tintColor = Asset.hexD0BBF9.color
+        arrowImageView.tintColor = Asset.hexD5BAFE.color
         return arrowImageView
     }()
 
