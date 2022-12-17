@@ -62,51 +62,8 @@ final class WordListCollectionVC: UIViewController {
         return collectionView
     }()
 
-    private lazy var inputTextView: UITextView = {
-        let inputTextView = UITextView()
-        inputTextView.backgroundColor = Asset.hex1D1C21.color
-        inputTextView.tintColor = Asset.hexF2F2F2.color
-        inputTextView.font = .avenirRegular16
-        inputTextView.layer.cornerRadius = 15.0
-        inputTextView.textColor = Asset.hexF2F2F2.color
-        inputTextView.showsVerticalScrollIndicator = false
-        inputTextView.textContainerInset = .init(top: 7.0, left: 7.0, bottom: 7.0, right: 7.0)
-        inputTextView.text = "English word"
-        inputTextView.delegate = self
-        return inputTextView
-    }()
-
-    private lazy var grayView: UIView = {
-        let grayView = UIView()
-        grayView.backgroundColor = Asset.hex2E2C32.color
-        grayView.layer.shadowColor = Asset.hex1D1C21.color.cgColor
-        grayView.layer.shadowOpacity = 1
-        grayView.layer.shadowOffset = .zero
-        grayView.layer.shadowRadius = 1
-        #warning("пофиксить тень")
-        return grayView
-    }()
-
-    private lazy var addButton: UIButton = {
-        let addButton = UIButton()
-        addButton.backgroundColor = Asset.hexF2F2F2.color
-        addButton.setTitleColor(Asset.hex2E2C32.color, for: .normal)
-        addButton.setTitle("Add", for: .normal)
-        addButton.titleLabel?.font = .avenirMedium16
-        addButton.layer.cornerRadius = 15.0
-        addButton.isHidden = true
-        addButton.addTarget(
-            self,
-            action: #selector(setAddWordInVocabulary),
-            for: .touchUpInside)
-        return addButton
-    }()
-
-
-
     private static let viewHeight = UIScreen.main.bounds.height
     private static let viewWidth = UIScreen.main.bounds.width
-    private static let inputViewHeight: CGFloat = 100.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,16 +72,11 @@ final class WordListCollectionVC: UIViewController {
         setAddBlurEffect()
         setupViews()
         setupHeaderConstraints()
-        setupInputViewConstraints()
         setupCollectionViewConstraints()
         setDismissKeyboardTapGesture()
-        setKeyboardNotifications()
     }
 
     private func setupViews() {
-        view.addSubview(grayView)
-        grayView.addSubview(inputTextView)
-        grayView.addSubview(addButton)
         view.addSubview(searchButton)
         view.addSubview(folderButton)
         view.addSubview(titleLabel)
@@ -148,30 +100,11 @@ final class WordListCollectionVC: UIViewController {
         }
     }
 
-    private func setupInputViewConstraints() {
-        grayView.snp.makeConstraints { make in
-            make.bottom.leading.trailing.equalToSuperview()
-            make.height.equalTo(Self.inputViewHeight)
-        }
-
-        inputTextView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(35)
-        }
-
-        addButton.snp.makeConstraints { make in
-            make.top.equalTo(inputTextView.snp.bottom).offset(12)
-            make.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(30)
-            make.width.equalTo(65)
-        }
-    }
-
     private func setupCollectionViewConstraints() {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(20)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(grayView.snp.top)
+            make.bottom.equalToSuperview().offset(-20)
         }
     }
 
@@ -209,56 +142,6 @@ final class WordListCollectionVC: UIViewController {
         view.layer.addSublayer(orangedLayer)
         view.layer.addSublayer(blueLayer)
         view.layer.addSublayer(redLayer)
-    }
-
-    private func setKeyboardNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(setKeyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil)
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(setKeyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil)
-    }
-
-    @objc private func setKeyboardWillShow(_ notification: Notification) {
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.grayView.snp.updateConstraints { make in
-                make.height.equalTo(keyboardSize.height.sum(Self.inputViewHeight).sum(50))
-            }
-            self?.inputTextView.snp.updateConstraints { make in
-                make.height.equalTo(58)
-            }
-            self?.view.layoutIfNeeded()
-        }
-        addButton.isHidden = false
-    }
-
-    @objc private func setKeyboardWillHide(_ notification: Notification) {
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.grayView.snp.updateConstraints { make in
-                make.height.equalTo(Self.inputViewHeight)
-            }
-            self?.inputTextView.snp.updateConstraints { make in
-                make.height.equalTo(35)
-            }
-            self?.view.layoutIfNeeded()
-        }
-        addButton.isHidden = true
-    }
-
-    @objc private func setAddWordInVocabulary() {
-        #warning("добавить событие добавления")
-    }
-
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        view.endEditing(true)
     }
 
 }
@@ -302,19 +185,5 @@ extension WordListCollectionVC: UICollectionViewDelegateFlowLayout {
         return CGSize(
             width: Self.viewWidth.subtraction(40),
             height: 70.0)
-    }
-}
-
-extension WordListCollectionVC: UITextViewDelegate {
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        let text = textView.text.nonOptional()
-
-        guard !text.contains(Symbols.returnCommand) else {
-            textView.text = text.replacingOccurrences(
-                of: Symbols.returnCommand,
-                with: String.empty)
-            view.endEditing(true)
-            return
-        }
     }
 }
