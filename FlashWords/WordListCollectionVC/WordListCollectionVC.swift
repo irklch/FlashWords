@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 final class WordListCollectionVC: UIViewController {
+    private let viewModel: WordListCollectionViewModel = .init()
+
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.text = Titles.newListName
@@ -24,6 +26,7 @@ final class WordListCollectionVC: UIViewController {
             self,
             action: #selector(setSearchButtonAction),
             for: .touchUpInside)
+        searchButton.tintColor = Asset.hexF2F2F2.color
         return searchButton
     }()
 
@@ -34,26 +37,28 @@ final class WordListCollectionVC: UIViewController {
             self,
             action: #selector(setSearchButtonAction),
             for: .touchUpInside)
+        folderButton.tintColor = Asset.hexF2F2F2.color
         return folderButton
     }()
 
     private lazy var collectionView: UICollectionView = {
         let collectionFlow = UICollectionViewFlowLayout()
         collectionFlow.scrollDirection = .vertical
-        collectionFlow.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionFlow)
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: collectionFlow)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsVerticalScrollIndicator = false
         collectionView.contentInset = .init(
             top: 0.0,
             left: 20.0,
-            bottom: 0.0,
+            bottom: 20.0,
             right: 20.0)
         collectionView.register(
-            NavBarCollectionItemsCell.self,
-            forCellWithReuseIdentifier: NavBarCollectionItemsCell.withReuseIdentifier)
-        collectionView.backgroundColor = Asset.hexFFFFFF.color
+            WordItemCell.self,
+            forCellWithReuseIdentifier: WordItemCell.withReuseIdentifier)
+        collectionView.backgroundColor = .clear
         return collectionView
     }()
     
@@ -64,25 +69,32 @@ final class WordListCollectionVC: UIViewController {
 
     private func setupView() {
         view.backgroundColor = Asset.hex1D1C21.color
-        view.addSubview(titleLabel)
         view.addSubview(searchButton)
         view.addSubview(folderButton)
+        view.addSubview(titleLabel)
+        view.addSubview(collectionView)
+
+        folderButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+        }
+
+
+        searchButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(20)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+        }
 
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(20)
-            make.top.equalToSuperview().offset(100)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(80)
         }
 
-        searchButton.snp.makeConstraints { make in
-            make.width.height.equalTo(30)
-            make.trailing.equalToSuperview().inset(20)
-            make.bottom.equalTo(titleLabel.snp.top).offset(-12)
-        }
 
-        folderButton.snp.makeConstraints { make in
-            make.width.height.equalTo(30)
-            make.leading.equalToSuperview().inset(20)
-            make.bottom.equalTo(titleLabel.snp.top).offset(-12)
+
+        collectionView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.leading.trailing.bottom.equalToSuperview()
         }
 
     }
@@ -91,6 +103,46 @@ final class WordListCollectionVC: UIViewController {
 
     }
 
-
 }
 
+extension WordListCollectionVC: UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return viewModel.cellsViewModel.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: WordItemCell.withReuseIdentifier,
+            for: indexPath) as? WordItemCell,
+              let viewModel = viewModel.cellsViewModel[safe: indexPath.row] else {
+            return .init(frame: .zero)
+        }
+        cell.setupView(viewModel: viewModel)
+        return cell
+    }
+}
+
+extension WordListCollectionVC: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+
+    }
+}
+
+extension WordListCollectionVC: UICollectionViewDelegateFlowLayout {
+    func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        return CGSize(
+            width: (view.window?.windowScene?.screen.bounds.width).nonOptional(300.0).subtraction(40),
+            height: 70.0)
+    }
+}

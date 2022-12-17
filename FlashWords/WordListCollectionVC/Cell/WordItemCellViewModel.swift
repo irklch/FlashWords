@@ -6,11 +6,10 @@
 //
 
 import Foundation
+import SwiftExtension
 
 struct WordItemCellViewModel {
-    let firstLanguage: String
-    let firstWord: String
-    let secodLanguage: String
-    let secondWord: String
+    let foreignWord: String
+    let netiveWord: String
     #warning("добавить сюда изображение")
 }

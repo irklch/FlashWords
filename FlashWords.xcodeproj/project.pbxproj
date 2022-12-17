@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73C294E0B2E0025118C /* String+Sizes.swift */; };
+		A92FE740294E0C510025118C /* WordListCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */; };
 		A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9C152F7294A6BC6004A0662 /* Colors.xcassets */; };
 		A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FA294A6FB3004A0662 /* Colors.swift */; };
 		A9C152FD294A7613004A0662 /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FC294A7613004A0662 /* Titles.swift */; };
@@ -29,6 +31,8 @@
 /* Begin PBXFileReference section */
 		A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.release.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.release.xcconfig"; sourceTree = "<group>"; };
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A92FE73C294E0B2E0025118C /* String+Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Sizes.swift"; sourceTree = "<group>"; };
+		A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListCollectionViewModel.swift; sourceTree = "<group>"; };
 		A9C152F7294A6BC6004A0662 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A9C152FA294A6FB3004A0662 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A9C152FC294A7613004A0662 /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
@@ -77,6 +81,24 @@
 				A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A92FE73B294E0AA10025118C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A9F9DCC2294A64AD00055BEF /* Fonts.swift */,
+				A9C152FC294A7613004A0662 /* Titles.swift */,
+				A9C1530B294A868A004A0662 /* Images.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A92FE73E294E0B310025118C /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A92FE73C294E0B2E0025118C /* String+Sizes.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		A9C152F9294A6F63004A0662 /* Assets */ = {
@@ -138,9 +160,8 @@
 		A9F9DCC1294A64AD00055BEF /* Tools */ = {
 			isa = PBXGroup;
 			children = (
-				A9F9DCC2294A64AD00055BEF /* Fonts.swift */,
-				A9C152FC294A7613004A0662 /* Titles.swift */,
-				A9C1530B294A868A004A0662 /* Images.swift */,
+				A92FE73B294E0AA10025118C /* Resources */,
+				A92FE73E294E0B310025118C /* Extensions */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -163,6 +184,7 @@
 			children = (
 				A9C1530F294A9256004A0662 /* Cell */,
 				A9F9DCAB294A623100055BEF /* WordListCollectionVC.swift */,
+				A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */,
 			);
 			path = WordListCollectionVC;
 			sourceTree = "<group>";
@@ -281,6 +303,8 @@
 				A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */,
 				A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */,
 				A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */,
+				A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */,
+				A92FE740294E0C510025118C /* WordListCollectionViewModel.swift in Sources */,
 				A9C15311294A9283004A0662 /* WordItemCellViewModel.swift in Sources */,
 				A9F9DCAA294A623100055BEF /* SceneDelegate.swift in Sources */,
 			);

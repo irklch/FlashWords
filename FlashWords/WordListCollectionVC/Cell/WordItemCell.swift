@@ -11,44 +11,38 @@ import SnapKit
 final class WordItemCell: UICollectionViewCell {
     static let withReuseIdentifier: String = .init(describing: WordItemCell.self)
 
+    private lazy var wordLabel: UILabel = {
+        let wordLabel = UILabel()
+        wordLabel.lineBreakMode = .byTruncatingTail
+        wordLabel.font = .avenirBold18
+        wordLabel.textColor = Asset.hexF2F2F2.color
+        wordLabel.textAlignment = .left
+        return wordLabel
+    }()
+
+    private lazy var arrowImageView: UIImageView = {
+        let arrowImageView = UIImageView()
+        arrowImageView.image = Images.arrow
+        arrowImageView.tintColor = Asset.hexD0BBF9.color
+        return arrowImageView
+    }()
+
     func setupView(viewModel: WordItemCellViewModel) {
         isSelected = false
         backgroundColor = Asset.hex2E2C32.color
-        layer.cornerRadius = 10.0
-        subviews.forEach { $0.removeFromSuperview() }
-        let firstLanguageLabel = Self.getLanguageLabel(text: viewModel.firstLanguage)
-        let firstWordLabel = Self.getWordLabel(text: viewModel.firstWord)
-        let secondLanguageLabel = Self.getLanguageLabel(text: viewModel.secodLanguage)
-        let secondWordLabel = Self.getWordLabel(text: viewModel.secondWord)
+        layer.cornerRadius = 15.0
 
-        addSubview(firstLanguageLabel)
-        addSubview(firstWordLabel)
-        addSubview(secondLanguageLabel)
-        addSubview(secondWordLabel)
+        wordLabel.text = viewModel.foreignWord
+        addSubview(wordLabel)
+        wordLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(20)
+        }
 
-        
-        firstLanguageLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(12)
-            make.leading.trailing.equalToSuperview().inset(16)
+        addSubview(arrowImageView)
+        arrowImageView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(20)
+            make.centerY.equalToSuperview()
         }
     }
-
-    private static func getLanguageLabel(text: String) -> UILabel {
-        let languageLabel = UILabel()
-        languageLabel.text = text
-        languageLabel.lineBreakMode = .byTruncatingTail
-        languageLabel.font = .avenirRegular12
-        languageLabel.textColor = Asset.hexF2F2F2.color
-        return languageLabel
-    }
-
-    private static func getWordLabel(text: String) -> UILabel {
-        let languageLabel = UILabel()
-        languageLabel.text = text
-        languageLabel.lineBreakMode = .byTruncatingTail
-        languageLabel.font = .avenirRegular16
-        languageLabel.textColor = Asset.hexF2F2F2.color
-        return languageLabel
-    }
-
 }
