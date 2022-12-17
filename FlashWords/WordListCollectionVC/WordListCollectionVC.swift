@@ -65,10 +65,12 @@ final class WordListCollectionVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        view.backgroundColor = Asset.hex2E2C32.color
+        setAddColorLayers()
+        setAddBlurEffect()
     }
 
     private func setupView() {
-        view.backgroundColor = Asset.hex1D1C21.color
         view.addSubview(searchButton)
         view.addSubview(folderButton)
         view.addSubview(titleLabel)
@@ -100,7 +102,37 @@ final class WordListCollectionVC: UIViewController {
     }
 
     @objc private func setSearchButtonAction() {
+    private func getColoredLayer(color: CGColor, cornerRadius: CGFloat) -> CALayer {
+        let pinkLayer: CALayer = .init()
+        pinkLayer.backgroundColor = color
+        pinkLayer.cornerRadius = cornerRadius
+        pinkLayer.shadowColor = color
+        pinkLayer.shadowOpacity = 1
+        pinkLayer.shadowOffset = .zero
+        pinkLayer.shadowRadius = 80
+        return pinkLayer
+    }
 
+    private func setAddBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = view.bounds
+        view.addSubview(blurEffectView)
+    }
+
+    private func setAddColorLayers() {
+        #warning("переписать")
+        let orangedLayer = getColoredLayer(color: Asset.hexF3C196.color.cgColor, cornerRadius: 100)
+        let blueLayer = getColoredLayer(color: Asset.hex3CEAE6.color.cgColor, cornerRadius: 85)
+        let redLayer = getColoredLayer(color: Asset.hexFFADAE.color.cgColor, cornerRadius: 125)
+
+        orangedLayer.frame = .init(x: 100, y: 30, width: 200, height: 150)
+        blueLayer.frame = .init(x: Self.viewWidth.subtraction(200), y: Self.viewHeight.subtraction(440), width: 150, height: 150)
+        redLayer.frame = .init(x: 40, y: Self.viewHeight.subtraction(200), width: 250, height: 250)
+        view.layer.addSublayer(orangedLayer)
+        view.layer.addSublayer(blueLayer)
+        view.layer.addSublayer(redLayer)
+    }
     }
 
 }
