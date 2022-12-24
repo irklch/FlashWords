@@ -209,6 +209,7 @@
 				A9F9DCA0294A623100055BEF /* Sources */,
 				A9F9DCA1294A623100055BEF /* Frameworks */,
 				A9F9DCA2294A623100055BEF /* Resources */,
+				C5093584C65FDACBB32C504B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -248,7 +249,7 @@
 			);
 			mainGroup = A9F9DC9B294A623100055BEF;
 			packageReferences = (
-				A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */,
+				A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */,
 				A9F9DCBE294A641C00055BEF /* XCRemoteSwiftPackageReference "Extensions" */,
 			);
 			productRefGroup = A9F9DCA5294A623100055BEF /* Products */;
@@ -277,6 +278,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		C5093584C65FDACBB32C504B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FlashWords/Pods-FlashWords-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FlashWords/Pods-FlashWords-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FlashWords/Pods-FlashWords-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		F5BD3C24722A65D220231D7C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -538,7 +556,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+		A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
 			requirement = {
@@ -559,7 +577,7 @@
 /* Begin XCSwiftPackageProductDependency section */
 		A9F9DCBC294A63ED00055BEF /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit" */;
+			package = A9F9DCBB294A63ED00055BEF /* XCRemoteSwiftPackageReference "SnapKit.git" */;
 			productName = SnapKit;
 		};
 		A9F9DCBF294A641C00055BEF /* SwiftExtension */ = {
