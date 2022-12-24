@@ -9,4 +9,5 @@ import Foundation
 
 enum Symbols {
     static let returnCommand = "\n"
+    static let plus = "+"
 }

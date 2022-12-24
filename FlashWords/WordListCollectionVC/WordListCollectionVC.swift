@@ -15,7 +15,7 @@ final class WordListCollectionVC: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = Titles.newListName
         titleLabel.font = .avenirBold36
-        titleLabel.textColor = Asset.hexF2F2F2.color
+        titleLabel.textColor = Asset.hex6ECDCC.color
         return titleLabel
     }()
 
@@ -52,9 +52,9 @@ final class WordListCollectionVC: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         collectionView.contentInset = .init(
             top: 0.0,
-            left: 20.0,
+            left: 16.0,
             bottom: 20.0,
-            right: 20.0)
+            right: 16.0)
         collectionView.register(
             WordItemCell.self,
             forCellWithReuseIdentifier: WordItemCell.withReuseIdentifier)
@@ -62,8 +62,59 @@ final class WordListCollectionVC: UIViewController {
         return collectionView
     }()
 
+    private lazy var addListButton: UIButton = {
+        let addListButton = UIButton()
+        addListButton.setImage(Images.plus, for: .normal)
+        addListButton.tintColor = Asset.hex6ECDCC.color
+        addListButton.addTarget(
+            self,
+            action: #selector(setAddNewList),
+            for: .touchUpInside)
+        return addListButton
+    }()
+
+    private lazy var inputTextView: UITextView = {
+        let inputTextView = UITextView()
+        inputTextView.backgroundColor = Asset.hex1D1C21.color
+        inputTextView.font = .avenirRegular16
+        inputTextView.layer.cornerRadius = 15.0
+        inputTextView.textColor = Asset.hex7A7A7E.color
+        inputTextView.showsVerticalScrollIndicator = false
+        inputTextView.contentInset = .init(top: 7.0, left: 7.0, bottom: 0.0, right: 7.0)
+        inputTextView.text = "New english word"
+        inputTextView.delegate = self
+        return inputTextView
+    }()
+
+    private lazy var grayView: UIView = {
+        let grayView = UIView()
+        grayView.backgroundColor = Asset.hex2E2C32.color
+        grayView.layer.shadowColor = Asset.hex1D1C21.color.cgColor
+        grayView.layer.shadowOpacity = 1
+        grayView.layer.shadowOffset = .zero
+        grayView.layer.shadowRadius = 1
+#warning("пофиксить тень")
+        return grayView
+    }()
+
+    private lazy var addWordButton: UIButton = {
+        let addWordButton = UIButton()
+        addWordButton.backgroundColor = Asset.hexF2F2F2.color
+        addWordButton.setTitleColor(Asset.hex2E2C32.color, for: .normal)
+        addWordButton.setTitle("Add", for: .normal)
+        addWordButton.titleLabel?.font = .avenirMedium16
+        addWordButton.layer.cornerRadius = 15.0
+        addWordButton.isHidden = true
+        addWordButton.addTarget(
+            self,
+            action: #selector(setAddWordInVocabulary),
+            for: .touchUpInside)
+        return addWordButton
+    }()
+
     private static let viewHeight = UIScreen.main.bounds.height
     private static let viewWidth = UIScreen.main.bounds.width
+    private static let inputViewHeight: CGFloat = 64.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,41 +123,112 @@ final class WordListCollectionVC: UIViewController {
         setAddBlurEffect()
         setupViews()
         setupHeaderConstraints()
+        setupInputViewConstraints()
         setupCollectionViewConstraints()
-        setDismissKeyboardTapGesture()
+        setKeyboardNotifications()
     }
 
     private func setupViews() {
-        view.addSubview(searchButton)
-        view.addSubview(folderButton)
+        view.addSubview(grayView)
+        grayView.addSubview(inputTextView)
+        grayView.addSubview(addWordButton)
         view.addSubview(titleLabel)
         view.addSubview(collectionView)
+        view.addSubview(addListButton)
     }
 
     private func setupHeaderConstraints() {
-        folderButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-        }
-
-        searchButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(20)
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
-        }
-
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(20)
-            make.top.equalTo(view.safeAreaLayoutGuide).offset(60)
+            make.leading.equalToSuperview().offset(16)
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+        }
+
+        addListButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalTo(titleLabel.snp.centerY)
+            make.height.width.equalTo(30)
         }
     }
 
     private func setupCollectionViewConstraints() {
         collectionView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-20)
+            make.bottom.equalTo(grayView.snp.top)
         }
     }
+
+    private func setupInputViewConstraints() {
+        grayView.snp.makeConstraints { make in
+            make.bottom.leading.trailing.equalToSuperview()
+            make.height.equalTo(Self.inputViewHeight)
+        }
+
+        inputTextView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(8)
+            make.leading.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(35)
+        }
+
+        addWordButton.snp.makeConstraints { make in
+            make.top.equalTo(inputTextView.snp.bottom).offset(12)
+            make.trailing.equalToSuperview().inset(16)
+            make.height.equalTo(30)
+            make.width.equalTo(65)
+        }
+    }
+
+    private func setKeyboardNotifications() {
+           NotificationCenter.default.addObserver(
+               self,
+               selector: #selector(setKeyboardWillShow),
+               name: UIResponder.keyboardWillShowNotification,
+               object: nil)
+
+           NotificationCenter.default.addObserver(
+               self,
+               selector: #selector(setKeyboardWillHide),
+               name: UIResponder.keyboardWillHideNotification,
+               object: nil)
+       }
+
+       @objc private func setKeyboardWillShow(_ notification: Notification) {
+           guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+
+           UIView.animate(withDuration: 0.3) { [weak self] in
+               self?.grayView.snp.updateConstraints { make in
+                   make.height.equalTo(keyboardSize.height.sum(Self.inputViewHeight).sum(50))
+               }
+               self?.inputTextView.snp.updateConstraints { make in
+                   make.height.equalTo(58)
+               }
+               self?.view.layoutIfNeeded()
+           }
+           addWordButton.isHidden = false
+       }
+
+       @objc private func setKeyboardWillHide(_ notification: Notification) {
+           UIView.animate(withDuration: 0.3) { [weak self] in
+               self?.grayView.snp.updateConstraints { make in
+                   make.height.equalTo(Self.inputViewHeight)
+               }
+               self?.inputTextView.snp.updateConstraints { make in
+                   make.height.equalTo(35)
+               }
+               self?.view.layoutIfNeeded()
+           }
+           addWordButton.isHidden = true
+       }
+
+       @objc private func setAddNewList() {
+           #warning("добавить событие добавления листа")
+       }
+
+       func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+           view.endEditing(true)
+       }
+
+
 
     @objc private func setSearchButtonAction() {
         #warning("добавить сёрч")
@@ -133,7 +255,7 @@ final class WordListCollectionVC: UIViewController {
     private func setAddColorLayers() {
         #warning("переписать")
         let orangedLayer = getColoredLayer(color: Asset.hexF3C196.color.cgColor, cornerRadius: 100)
-        let blueLayer = getColoredLayer(color: Asset.hex3CEAE6.color.cgColor, cornerRadius: 85)
+        let blueLayer = getColoredLayer(color: Asset.hex6ECDCC.color.cgColor, cornerRadius: 85)
         let redLayer = getColoredLayer(color: Asset.hexFFADAE.color.cgColor, cornerRadius: 125)
 
         orangedLayer.frame = .init(x: 100, y: 30, width: 200, height: 150)
@@ -142,6 +264,10 @@ final class WordListCollectionVC: UIViewController {
         view.layer.addSublayer(orangedLayer)
         view.layer.addSublayer(blueLayer)
         view.layer.addSublayer(redLayer)
+    }
+
+    @objc private func setAddWordInVocabulary() {
+        #warning("добавить событие добавления")
     }
 
 }
@@ -183,7 +309,38 @@ extension WordListCollectionVC: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return CGSize(
-            width: Self.viewWidth.subtraction(40),
-            height: 70.0)
+            width: Self.viewWidth.subtraction(36),
+            height: 50.0)
+    }
+}
+
+
+extension WordListCollectionVC: UITextViewDelegate {
+
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        if textView.textColor == Asset.hex7A7A7E.color {
+            textView.textColor = Asset.hexF2F2F2.color
+            textView.text = .empty
+        }
+        return true
+    }
+
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == .empty {
+            textView.textColor = Asset.hex7A7A7E.color
+            textView.text = "New english word"
+        }
+    }
+
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        let text = textView.text.nonOptional()
+
+        guard !text.contains(Symbols.returnCommand) else {
+            textView.text = text.replacingOccurrences(
+                of: Symbols.returnCommand,
+                with: String.empty)
+            view.endEditing(true)
+            return
+        }
     }
 }

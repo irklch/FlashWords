@@ -28,4 +28,8 @@ enum Images {
         systemName: "arrow.right.circle",
         withConfiguration: mediumConfig)?
         .withRenderingMode(.alwaysTemplate)
+    static let plus: UIImage? = .init(
+        systemName: "plus.circle.fill",
+        withConfiguration: largeConfig)?
+        .withRenderingMode(.alwaysTemplate)
 }
