@@ -15,30 +15,8 @@ final class WordListCollectionVC: UIViewController {
         let titleLabel = UILabel()
         titleLabel.text = Titles.newListName
         titleLabel.font = .avenirBold36
-        titleLabel.textColor = Asset.hex6ECDCC.color
+        titleLabel.textColor = Asset.hexFCFCFC.color
         return titleLabel
-    }()
-
-    private lazy var searchButton: UIButton = {
-        let searchButton = UIButton()
-        searchButton.setImage(Images.search, for: .normal)
-        searchButton.addTarget(
-            self,
-            action: #selector(setSearchButtonAction),
-            for: .touchUpInside)
-        searchButton.tintColor = Asset.hexF2F2F2.color
-        return searchButton
-    }()
-
-    private lazy var folderButton: UIButton = {
-        let folderButton = UIButton()
-        folderButton.setImage(Images.folder, for: .normal)
-        folderButton.addTarget(
-            self,
-            action: #selector(setSearchButtonAction),
-            for: .touchUpInside)
-        folderButton.tintColor = Asset.hexF2F2F2.color
-        return folderButton
     }()
 
     private lazy var collectionView: UICollectionView = {
@@ -65,7 +43,7 @@ final class WordListCollectionVC: UIViewController {
     private lazy var addListButton: UIButton = {
         let addListButton = UIButton()
         addListButton.setImage(Images.plus, for: .normal)
-        addListButton.tintColor = Asset.hex6ECDCC.color
+        addListButton.tintColor = Asset.hexFCFCFC.color
         addListButton.addTarget(
             self,
             action: #selector(setAddNewList),
@@ -73,23 +51,29 @@ final class WordListCollectionVC: UIViewController {
         return addListButton
     }()
 
+#warning("вынести в отдельную вью")
     private lazy var inputTextView: UITextView = {
         let inputTextView = UITextView()
-        inputTextView.backgroundColor = Asset.hex1D1C21.color
+        inputTextView.backgroundColor = Asset.hex333337.color
         inputTextView.font = .avenirRegular16
         inputTextView.layer.cornerRadius = 15.0
         inputTextView.textColor = Asset.hex7A7A7E.color
         inputTextView.showsVerticalScrollIndicator = false
-        inputTextView.contentInset = .init(top: 7.0, left: 7.0, bottom: 0.0, right: 7.0)
+        inputTextView.textContainerInset = .init(
+            top: 8.0,
+            left: 8.0,
+            bottom: 0.0,
+            right: 8.0)
         inputTextView.text = "New english word"
         inputTextView.delegate = self
+        inputTextView.isScrollEnabled = false
         return inputTextView
     }()
 
     private lazy var grayView: UIView = {
         let grayView = UIView()
-        grayView.backgroundColor = Asset.hex2E2C32.color
-        grayView.layer.shadowColor = Asset.hex1D1C21.color.cgColor
+        grayView.backgroundColor = Asset.hex424247.color
+        grayView.layer.shadowColor = Asset.hex000000.color.cgColor
         grayView.layer.shadowOpacity = 1
         grayView.layer.shadowOffset = .zero
         grayView.layer.shadowRadius = 1
@@ -99,8 +83,8 @@ final class WordListCollectionVC: UIViewController {
 
     private lazy var addWordButton: UIButton = {
         let addWordButton = UIButton()
-        addWordButton.backgroundColor = Asset.hexF2F2F2.color
-        addWordButton.setTitleColor(Asset.hex2E2C32.color, for: .normal)
+        addWordButton.backgroundColor = Asset.hexFCFCFC.color
+        addWordButton.setTitleColor(Asset.hex424247.color, for: .normal)
         addWordButton.setTitle("Add", for: .normal)
         addWordButton.titleLabel?.font = .avenirMedium16
         addWordButton.layer.cornerRadius = 15.0
@@ -118,23 +102,21 @@ final class WordListCollectionVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = Asset.hex2E2C32.color
-        setAddColorLayers()
-        setAddBlurEffect()
+        view.backgroundColor = Asset.hex333337.color
         setupViews()
         setupHeaderConstraints()
-        setupInputViewConstraints()
         setupCollectionViewConstraints()
+        setupInputViewConstraints()
         setKeyboardNotifications()
     }
 
     private func setupViews() {
-        view.addSubview(grayView)
-        grayView.addSubview(inputTextView)
-        grayView.addSubview(addWordButton)
         view.addSubview(titleLabel)
         view.addSubview(collectionView)
         view.addSubview(addListButton)
+        view.addSubview(grayView)
+        grayView.addSubview(inputTextView)
+        grayView.addSubview(addWordButton)
     }
 
     private func setupHeaderConstraints() {
@@ -154,7 +136,7 @@ final class WordListCollectionVC: UIViewController {
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(grayView.snp.top)
+            make.bottom.equalToSuperview().offset(-Self.inputViewHeight)
         }
     }
 
@@ -179,95 +161,67 @@ final class WordListCollectionVC: UIViewController {
     }
 
     private func setKeyboardNotifications() {
-           NotificationCenter.default.addObserver(
-               self,
-               selector: #selector(setKeyboardWillShow),
-               name: UIResponder.keyboardWillShowNotification,
-               object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(setKeyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
 
-           NotificationCenter.default.addObserver(
-               self,
-               selector: #selector(setKeyboardWillHide),
-               name: UIResponder.keyboardWillHideNotification,
-               object: nil)
-       }
-
-       @objc private func setKeyboardWillShow(_ notification: Notification) {
-           guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-
-           UIView.animate(withDuration: 0.3) { [weak self] in
-               self?.grayView.snp.updateConstraints { make in
-                   make.height.equalTo(keyboardSize.height.sum(Self.inputViewHeight).sum(50))
-               }
-               self?.inputTextView.snp.updateConstraints { make in
-                   make.height.equalTo(58)
-               }
-               self?.view.layoutIfNeeded()
-           }
-           addWordButton.isHidden = false
-       }
-
-       @objc private func setKeyboardWillHide(_ notification: Notification) {
-           UIView.animate(withDuration: 0.3) { [weak self] in
-               self?.grayView.snp.updateConstraints { make in
-                   make.height.equalTo(Self.inputViewHeight)
-               }
-               self?.inputTextView.snp.updateConstraints { make in
-                   make.height.equalTo(35)
-               }
-               self?.view.layoutIfNeeded()
-           }
-           addWordButton.isHidden = true
-       }
-
-       @objc private func setAddNewList() {
-           #warning("добавить событие добавления листа")
-       }
-
-       func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-           view.endEditing(true)
-       }
-
-
-
-    @objc private func setSearchButtonAction() {
-        #warning("добавить сёрч")
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(setKeyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
     }
 
-    private func getColoredLayer(color: CGColor, cornerRadius: CGFloat) -> CALayer {
-        let pinkLayer: CALayer = .init()
-        pinkLayer.backgroundColor = color
-        pinkLayer.cornerRadius = cornerRadius
-        pinkLayer.shadowColor = color
-        pinkLayer.shadowOpacity = 1
-        pinkLayer.shadowOffset = .zero
-        pinkLayer.shadowRadius = 80
-        return pinkLayer
+    @objc private func setKeyboardWillShow(_ notification: Notification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            let grayViewHeight = keyboardSize.height.sum(Self.inputViewHeight).sum(50)
+            self.grayView.snp.updateConstraints { make in
+                make.height.equalTo(grayViewHeight)
+            }
+            self.inputTextView.snp.updateConstraints { make in
+                make.height.equalTo(58)
+            }
+            self.collectionView.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().offset(-grayViewHeight)
+            }
+            self.view.layoutIfNeeded()
+        }
+        addWordButton.isHidden = false
     }
 
-    private func setAddBlurEffect() {
-        let blurEffect = UIBlurEffect(style: .dark)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = view.bounds
-        view.addSubview(blurEffectView)
+    @objc private func setKeyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            guard let self = self else { return }
+            self.grayView.snp.updateConstraints { make in
+                make.height.equalTo(Self.inputViewHeight)
+            }
+            self.inputTextView.snp.updateConstraints { make in
+                make.height.equalTo(35)
+            }
+            self.collectionView.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().offset(-Self.inputViewHeight)
+            }
+            self.view.layoutIfNeeded()
+        }
+        addWordButton.isHidden = true
     }
 
-    private func setAddColorLayers() {
-        #warning("переписать")
-        let orangedLayer = getColoredLayer(color: Asset.hexF3C196.color.cgColor, cornerRadius: 100)
-        let blueLayer = getColoredLayer(color: Asset.hex6ECDCC.color.cgColor, cornerRadius: 85)
-        let redLayer = getColoredLayer(color: Asset.hexFFADAE.color.cgColor, cornerRadius: 125)
-
-        orangedLayer.frame = .init(x: 100, y: 30, width: 200, height: 150)
-        blueLayer.frame = .init(x: Self.viewWidth.subtraction(200), y: Self.viewHeight.subtraction(440), width: 150, height: 150)
-        redLayer.frame = .init(x: 40, y: Self.viewHeight.subtraction(200), width: 250, height: 250)
-        view.layer.addSublayer(orangedLayer)
-        view.layer.addSublayer(blueLayer)
-        view.layer.addSublayer(redLayer)
+    @objc private func setAddNewList() {
+#warning("добавить событие добавления листа")
     }
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        view.endEditing(true)
+    }
+
 
     @objc private func setAddWordInVocabulary() {
-        #warning("добавить событие добавления")
+#warning("добавить событие добавления")
     }
 
 }
@@ -316,11 +270,12 @@ extension WordListCollectionVC: UICollectionViewDelegateFlowLayout {
 
 
 extension WordListCollectionVC: UITextViewDelegate {
-
+    #warning("добавить расчёт высоты")
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView.textColor == Asset.hex7A7A7E.color {
             textView.textColor = Asset.hexF2F2F2.color
             textView.text = .empty
+            textView.isScrollEnabled = true
         }
         return true
     }
@@ -329,6 +284,7 @@ extension WordListCollectionVC: UITextViewDelegate {
         if textView.text == .empty {
             textView.textColor = Asset.hex7A7A7E.color
             textView.text = "New english word"
+            textView.isScrollEnabled = false
         }
     }
 

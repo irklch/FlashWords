@@ -15,7 +15,7 @@ final class WordItemCell: UICollectionViewCell {
         let wordLabel = UILabel()
         wordLabel.lineBreakMode = .byTruncatingTail
         wordLabel.font = .avenirBold18
-        wordLabel.textColor = Asset.hexF2F2F2.color
+        wordLabel.textColor = Asset.hexFCFCFC.color
         wordLabel.textAlignment = .left
         return wordLabel
     }()
@@ -23,13 +23,13 @@ final class WordItemCell: UICollectionViewCell {
     private lazy var arrowImageView: UIImageView = {
         let arrowImageView = UIImageView()
         arrowImageView.image = Images.arrow
-        arrowImageView.tintColor = Asset.hexD5BAFE.color
+        arrowImageView.tintColor = Asset.hexFCFCFC.color
         return arrowImageView
     }()
 
     func setupView(viewModel: WordItemCellViewModel) {
         isSelected = false
-        backgroundColor = Asset.hex2E2C32.color
+        backgroundColor = Asset.hex5E5E69.color
         layer.cornerRadius = 15.0
 
         wordLabel.text = viewModel.foreignWord

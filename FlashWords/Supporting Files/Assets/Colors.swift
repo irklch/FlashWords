@@ -22,11 +22,15 @@ internal enum Asset {
   internal static let hex000000 = ColorAsset(name: "hex000000")
   internal static let hex1D1C21 = ColorAsset(name: "hex1D1C21")
   internal static let hex2E2C32 = ColorAsset(name: "hex2E2C32")
+  internal static let hex333337 = ColorAsset(name: "hex333337")
+  internal static let hex424247 = ColorAsset(name: "hex424247")
+  internal static let hex5E5E69 = ColorAsset(name: "hex5E5E69")
   internal static let hex6ECDCC = ColorAsset(name: "hex6ECDCC")
   internal static let hex7A7A7E = ColorAsset(name: "hex7A7A7E")
   internal static let hexD5BAFE = ColorAsset(name: "hexD5BAFE")
   internal static let hexF2F2F2 = ColorAsset(name: "hexF2F2F2")
   internal static let hexF3C196 = ColorAsset(name: "hexF3C196")
+  internal static let hexFCFCFC = ColorAsset(name: "hexFCFCFC")
   internal static let hexFFADAE = ColorAsset(name: "hexFFADAE")
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
