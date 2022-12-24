@@ -6,34 +6,19 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct WordListCollectionViewModel {
-    let cellsViewModel: [WordItemCellViewModel]
+    let cellsViewModel: [WordItemCellViewModel] = []
 
     init() {
-        self.cellsViewModel = [
-            .init(foreignWord: "name", netiveWord: "Имя"),
-                .init(foreignWord: "Compatitive", netiveWord: "Подходящий"),
-                .init(foreignWord: "Straight", netiveWord: "Обычный"),
-                .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко"),
-            .init(foreignWord: "Close", netiveWord: "Близко")]
-        #warning("добавить базу данных")
+
     }
 
+}
+
+extension WordListCollectionViewModel {
+//    static func getListItems() -> [WordListModelNonDB] {
+//
+//    }
 }

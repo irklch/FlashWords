@@ -88,7 +88,7 @@ final class WordListCollectionVC: UIViewController {
         addWordButton.setTitle("Add", for: .normal)
         addWordButton.titleLabel?.font = .avenirMedium16
         addWordButton.layer.cornerRadius = 15.0
-        addWordButton.isHidden = true
+        addWordButton.alpha = 0
         addWordButton.addTarget(
             self,
             action: #selector(setAddWordInVocabulary),
@@ -189,9 +189,9 @@ final class WordListCollectionVC: UIViewController {
             self.collectionView.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().offset(-grayViewHeight)
             }
+            self.addWordButton.alpha = 1
             self.view.layoutIfNeeded()
         }
-        addWordButton.isHidden = false
     }
 
     @objc private func setKeyboardWillHide(_ notification: Notification) {
@@ -206,9 +206,9 @@ final class WordListCollectionVC: UIViewController {
             self.collectionView.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().offset(-Self.inputViewHeight)
             }
+            self.addWordButton.alpha = 0
             self.view.layoutIfNeeded()
         }
-        addWordButton.isHidden = true
     }
 
     @objc private func setAddNewList() {
