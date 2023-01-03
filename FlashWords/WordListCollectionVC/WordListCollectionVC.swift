@@ -51,62 +51,14 @@ final class WordListCollectionVC: UIViewController {
         return addListButton
     }()
 
-#warning("вынести в отдельную вью")
-    private lazy var inputTextView: UITextView = {
-        let inputTextView = UITextView()
-        inputTextView.backgroundColor = Asset.hex333337.color
-        inputTextView.font = .avenirRegular16
-        inputTextView.layer.cornerRadius = 15.0
-        inputTextView.textColor = Asset.hex7A7A7E.color
-        inputTextView.showsVerticalScrollIndicator = false
-        inputTextView.textContainerInset = .init(
-            top: 8.0,
-            left: 8.0,
-            bottom: 0.0,
-            right: 8.0)
-        inputTextView.text = "New english word"
-        inputTextView.delegate = self
-        inputTextView.isScrollEnabled = false
-        return inputTextView
-    }()
-
-    private lazy var grayView: UIView = {
-        let grayView = UIView()
-        grayView.backgroundColor = Asset.hex424247.color
-        grayView.layer.shadowColor = Asset.hex000000.color.cgColor
-        grayView.layer.shadowOpacity = 1
-        grayView.layer.shadowOffset = .zero
-        grayView.layer.shadowRadius = 1
-#warning("пофиксить тень")
-        return grayView
-    }()
-
-    private lazy var addWordButton: UIButton = {
-        let addWordButton = UIButton()
-        addWordButton.backgroundColor = Asset.hexFCFCFC.color
-        addWordButton.setTitleColor(Asset.hex424247.color, for: .normal)
-        addWordButton.setTitle("Add", for: .normal)
-        addWordButton.titleLabel?.font = .avenirMedium16
-        addWordButton.layer.cornerRadius = 15.0
-        addWordButton.alpha = 0
-        addWordButton.addTarget(
-            self,
-            action: #selector(setAddWordInVocabulary),
-            for: .touchUpInside)
-        return addWordButton
-    }()
-
-    private static let viewHeight = UIScreen.main.bounds.height
-    private static let viewWidth = UIScreen.main.bounds.width
-    private static let inputViewHeight: CGFloat = 64.0
+    private lazy var newWordInputView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Asset.hex333337.color
         setupViews()
         setupHeaderConstraints()
-        setupCollectionViewConstraints()
-        setupInputViewConstraints()
+        setupCollectionAndInputViewConstraints()
         setKeyboardNotifications()
     }
 
@@ -114,9 +66,7 @@ final class WordListCollectionVC: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(collectionView)
         view.addSubview(addListButton)
-        view.addSubview(grayView)
-        grayView.addSubview(inputTextView)
-        grayView.addSubview(addWordButton)
+        view.addSubview(newWordInputView)
     }
 
     private func setupHeaderConstraints() {
@@ -132,31 +82,17 @@ final class WordListCollectionVC: UIViewController {
         }
     }
 
-    private func setupCollectionViewConstraints() {
+    private func setupCollectionAndInputViewConstraints() {
+        let inputViewHeight = viewModel.inputTextViewModel.getViewHeight(isOpened: false)
         collectionView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().offset(-Self.inputViewHeight)
+            make.bottom.equalToSuperview().offset(-inputViewHeight)
         }
-    }
 
-    private func setupInputViewConstraints() {
-        grayView.snp.makeConstraints { make in
+        newWordInputView.snp.makeConstraints { make in
             make.bottom.leading.trailing.equalToSuperview()
-            make.height.equalTo(Self.inputViewHeight)
-        }
-
-        inputTextView.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(8)
-            make.leading.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(35)
-        }
-
-        addWordButton.snp.makeConstraints { make in
-            make.top.equalTo(inputTextView.snp.bottom).offset(12)
-            make.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(30)
-            make.width.equalTo(65)
+            make.height.equalTo(inputViewHeight)
         }
     }
 
@@ -179,17 +115,15 @@ final class WordListCollectionVC: UIViewController {
 
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else { return }
-            let grayViewHeight = keyboardSize.height.sum(Self.inputViewHeight).sum(50)
-            self.grayView.snp.updateConstraints { make in
-                make.height.equalTo(grayViewHeight)
+            let inputViewOpenedHeight = self.viewModel.inputTextViewModel.getViewHeight(isOpened: true)
+            let inputViewHeightWithKeyboard = keyboardSize.height.sum(inputViewOpenedHeight)
+            self.newWordInputView.snp.updateConstraints { make in
+                make.height.equalTo(inputViewHeightWithKeyboard)
             }
-            self.inputTextView.snp.updateConstraints { make in
-                make.height.equalTo(58)
-            }
+
             self.collectionView.snp.updateConstraints { make in
-                make.bottom.equalToSuperview().offset(-grayViewHeight)
+                make.bottom.equalToSuperview().offset(-inputViewHeightWithKeyboard)
             }
-            self.addWordButton.alpha = 1
             self.view.layoutIfNeeded()
         }
     }
@@ -197,16 +131,13 @@ final class WordListCollectionVC: UIViewController {
     @objc private func setKeyboardWillHide(_ notification: Notification) {
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else { return }
-            self.grayView.snp.updateConstraints { make in
-                make.height.equalTo(Self.inputViewHeight)
-            }
-            self.inputTextView.snp.updateConstraints { make in
-                make.height.equalTo(35)
+            let inputViewClosedHeight = self.viewModel.inputTextViewModel.getViewHeight(isOpened: false)
+            self.newWordInputView.snp.updateConstraints { make in
+                make.height.equalTo(inputViewClosedHeight)
             }
             self.collectionView.snp.updateConstraints { make in
-                make.bottom.equalToSuperview().offset(-Self.inputViewHeight)
+                make.bottom.equalToSuperview().offset(-inputViewClosedHeight)
             }
-            self.addWordButton.alpha = 0
             self.view.layoutIfNeeded()
         }
     }
@@ -217,11 +148,6 @@ final class WordListCollectionVC: UIViewController {
 
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         view.endEditing(true)
-    }
-
-
-    @objc private func setAddWordInVocabulary() {
-#warning("добавить событие добавления")
     }
 
 }
@@ -235,17 +161,17 @@ extension WordListCollectionVC: UICollectionViewDataSource {
         _ collectionView: UICollectionView,
         numberOfItemsInSection section: Int
     ) -> Int {
-        return viewModel.cellsViewModel.count
+        return viewModel.selectedListData.wordsModel.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: WordItemCell.withReuseIdentifier,
             for: indexPath) as? WordItemCell,
-              let viewModel = viewModel.cellsViewModel[safe: indexPath.row] else {
+              let wordsData = viewModel.selectedListData.wordsModel[safe: indexPath.row] else {
             return .init(frame: .zero)
         }
-        cell.setupView(viewModel: viewModel)
+        cell.setupView(viewModel: .init(data: wordsData))
         return cell
     }
 }
@@ -263,40 +189,9 @@ extension WordListCollectionVC: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
         return CGSize(
-            width: Self.viewWidth.subtraction(36),
+            width: UIScreen.main.bounds.width.subtraction(36),
             height: 50.0)
     }
 }
 
 
-extension WordListCollectionVC: UITextViewDelegate {
-    #warning("добавить расчёт высоты")
-    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if textView.textColor == Asset.hex7A7A7E.color {
-            textView.textColor = Asset.hexF2F2F2.color
-            textView.text = .empty
-            textView.isScrollEnabled = true
-        }
-        return true
-    }
-
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text == .empty {
-            textView.textColor = Asset.hex7A7A7E.color
-            textView.text = "New english word"
-            textView.isScrollEnabled = false
-        }
-    }
-
-    func textViewDidChangeSelection(_ textView: UITextView) {
-        let text = textView.text.nonOptional()
-
-        guard !text.contains(Symbols.returnCommand) else {
-            textView.text = text.replacingOccurrences(
-                of: Symbols.returnCommand,
-                with: String.empty)
-            view.endEditing(true)
-            return
-        }
-    }
-}

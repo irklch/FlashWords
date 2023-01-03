@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		A9281F602964A74300393585 /* ListsModelDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F5F2964A74300393585 /* ListsModelDB.swift */; };
 		A9281F632964A75600393585 /* ListsModelNonDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F622964A75600393585 /* ListsModelNonDB.swift */; };
+		A9281F652964B01A00393585 /* NewWordInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F642964B01A00393585 /* NewWordInputView.swift */; };
+		A9281F682964B02F00393585 /* NewWordInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F672964B02F00393585 /* NewWordInputViewModel.swift */; };
 		A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73C294E0B2E0025118C /* String+Sizes.swift */; };
 		A92FE740294E0C510025118C /* WordListCollectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */; };
 		A92FE742294E748D0025118C /* UIViewController+KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */; };
@@ -41,6 +43,8 @@
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A9281F5F2964A74300393585 /* ListsModelDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsModelDB.swift; sourceTree = "<group>"; };
 		A9281F622964A75600393585 /* ListsModelNonDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsModelNonDB.swift; sourceTree = "<group>"; };
+		A9281F642964B01A00393585 /* NewWordInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWordInputView.swift; sourceTree = "<group>"; };
+		A9281F672964B02F00393585 /* NewWordInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewWordInputViewModel.swift; sourceTree = "<group>"; };
 		A92FE73C294E0B2E0025118C /* String+Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Sizes.swift"; sourceTree = "<group>"; };
 		A92FE73F294E0C510025118C /* WordListCollectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordListCollectionViewModel.swift; sourceTree = "<group>"; };
 		A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KeyboardDismiss.swift"; sourceTree = "<group>"; };
@@ -115,6 +119,15 @@
 				A9281F622964A75600393585 /* ListsModelNonDB.swift */,
 			);
 			path = ListsModel;
+			sourceTree = "<group>";
+		};
+		A9281F662964B02100393585 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A9281F642964B01A00393585 /* NewWordInputView.swift */,
+				A9281F672964B02F00393585 /* NewWordInputViewModel.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 		A92FE73B294E0AA10025118C /* Resources */ = {
@@ -368,6 +381,7 @@
 				A9C1530E294A9252004A0662 /* WordItemCell.swift in Sources */,
 				A9C1530C294A868A004A0662 /* Images.swift in Sources */,
 				A9C152FD294A7613004A0662 /* Titles.swift in Sources */,
+				A9281F682964B02F00393585 /* NewWordInputViewModel.swift in Sources */,
 				A9F9DCC3294A64AD00055BEF /* Fonts.swift in Sources */,
 				A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */,
 				A9F9DCAC294A623100055BEF /* WordListCollectionVC.swift in Sources */,
@@ -378,6 +392,7 @@
 				A9281F632964A75600393585 /* ListsModelNonDB.swift in Sources */,
 				A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */,
 				A92FE740294E0C510025118C /* WordListCollectionViewModel.swift in Sources */,
+				A9281F652964B01A00393585 /* NewWordInputView.swift in Sources */,
 				A9C15311294A9283004A0662 /* WordItemCellViewModel.swift in Sources */,
 				A9EDB7EE2957325B001CDE86 /* WordsModelNonDB.swift in Sources */,
 				A9F9DCAA294A623100055BEF /* SceneDelegate.swift in Sources */,
