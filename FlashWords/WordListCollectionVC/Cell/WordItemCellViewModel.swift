@@ -9,7 +9,5 @@ import Foundation
 import SwiftExtension
 
 struct WordItemCellViewModel {
-    let foreignWord: String
-    let netiveWord: String
-    #warning("добавить сюда изображение")
+    let data: WordsModelNonDB
 }

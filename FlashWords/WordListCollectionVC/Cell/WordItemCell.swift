@@ -32,7 +32,7 @@ final class WordItemCell: UICollectionViewCell {
         backgroundColor = Asset.hex5E5E69.color
         layer.cornerRadius = 15.0
 
-        wordLabel.text = viewModel.foreignWord
+        wordLabel.text = viewModel.data.foreignWord
         addSubview(wordLabel)
         wordLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
