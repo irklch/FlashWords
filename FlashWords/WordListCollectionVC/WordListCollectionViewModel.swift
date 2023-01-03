@@ -1,5 +1,5 @@
 //
-//  WordListCollectionViewModel.swift
+//  WordListTableViewModel.swift
 //  FlashWords
 //
 //  Created by Ирина Кольчугина on 17.12.2022.
@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import Combine
 
-final class WordListCollectionViewModel {
+final class WordListTableViewModel {
     @Published var mainThreadActionsState: MainThreadActionsState = .subscriptionAction
     var selectedListData: ListsModelNonDB
     let inputTextViewModel: NewWordInputViewModel
@@ -58,7 +58,7 @@ final class WordListCollectionViewModel {
 
 }
 
-extension WordListCollectionViewModel {
+extension WordListTableViewModel {
     static func getListsDataItemsFromLocalStorage() -> [ListsModelNonDB] {
         do {
             let realm = try Realm()
@@ -86,7 +86,7 @@ extension WordListCollectionViewModel {
     }
 }
 
-extension WordListCollectionViewModel {
+extension WordListTableViewModel {
     enum MainThreadActionsState {
         case subscriptionAction
         case reloadData

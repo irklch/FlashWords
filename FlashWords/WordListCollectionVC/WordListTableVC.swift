@@ -1,5 +1,5 @@
 //
-//  WordListCollectionVC.swift
+//  WordListTableVC.swift
 //  FlashWords
 //
 //  Created by Ирина Кольчугина on 14.12.2022.
@@ -9,8 +9,8 @@ import UIKit
 import SnapKit
 import Combine
 
-final class WordListCollectionVC: UIViewController {
-    private let viewModel: WordListCollectionViewModel = .init()
+final class WordListTableVC: UIViewController {
+    private let viewModel: WordListTableViewModel = .init()
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -20,25 +20,18 @@ final class WordListCollectionVC: UIViewController {
         return titleLabel
     }()
 
-    private lazy var collectionView: UICollectionView = {
-        let collectionFlow = UICollectionViewFlowLayout()
-        collectionFlow.scrollDirection = .vertical
-        let collectionView = UICollectionView(
-            frame: .zero,
-            collectionViewLayout: collectionFlow)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        collectionView.showsVerticalScrollIndicator = false
-        collectionView.contentInset = .init(
-            top: 0.0,
-            left: 16.0,
-            bottom: 20.0,
-            right: 16.0)
-        collectionView.register(
-            WordItemCell.self,
-            forCellWithReuseIdentifier: WordItemCell.withReuseIdentifier)
-        collectionView.backgroundColor = .clear
-        return collectionView
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView(frame: .zero)
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.showsVerticalScrollIndicator = false
+        tableView.register(
+            WordItemCell.self, 
+            forCellReuseIdentifier: WordItemCell.withReuseIdentifier)
+        tableView.backgroundColor = .clear
+        tableView.bounces = true
+        tableView.separatorStyle = .none
+        return tableView
     }()
 
     private lazy var addListButton: UIButton = {
@@ -67,7 +60,7 @@ final class WordListCollectionVC: UIViewController {
 
     private func setupViews() {
         view.addSubview(titleLabel)
-        view.addSubview(collectionView)
+        view.addSubview(tableView)
         view.addSubview(addListButton)
         view.addSubview(newWordInputView)
     }
@@ -87,9 +80,9 @@ final class WordListCollectionVC: UIViewController {
 
     private func setupCollectionAndInputViewConstraints() {
         let inputViewHeight = viewModel.inputTextViewModel.getViewHeight(isOpened: false)
-        collectionView.snp.makeConstraints { make in
+        tableView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview()
+            make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().offset(-inputViewHeight)
         }
 
@@ -125,7 +118,7 @@ final class WordListCollectionVC: UIViewController {
                 make.height.equalTo(inputViewHeightWithKeyboard)
             }
 
-            self.collectionView.snp.updateConstraints { make in
+            self.tableView.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().offset(-inputViewHeightWithKeyboard)
             }
             self.view.layoutIfNeeded()
@@ -140,7 +133,7 @@ final class WordListCollectionVC: UIViewController {
             self.newWordInputView.snp.updateConstraints { make in
                 make.height.equalTo(inputViewClosedHeight)
             }
-            self.collectionView.snp.updateConstraints { make in
+            self.tableView.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().offset(-inputViewClosedHeight)
             }
             self.view.layoutIfNeeded()
@@ -164,53 +157,69 @@ final class WordListCollectionVC: UIViewController {
                 case .subscriptionAction:
                     break
                 case .reloadData:
-                    self?.collectionView.reloadData()
+                    self?.tableView.reloadData()
                 }
             }
     }
 
 }
 
-extension WordListCollectionVC: UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-    func collectionView(
-        _ collectionView: UICollectionView,
-        numberOfItemsInSection section: Int
-    ) -> Int {
+extension WordListTableVC: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.selectedListData.wordsModel.count
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(
-            withReuseIdentifier: WordItemCell.withReuseIdentifier,
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
+        return 1
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: WordItemCell.withReuseIdentifier,
             for: indexPath) as? WordItemCell,
-              let wordsData = viewModel.selectedListData.wordsModel.reversed()[safe: indexPath.row] else {
+              let wordsData = viewModel.selectedListData.wordsModel.reversed()[safe: indexPath.section] else {
             return .init(frame: .zero)
         }
         cell.setupView(viewModel: .init(data: wordsData))
         return cell
     }
-}
 
-extension WordListCollectionVC: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func tableView(
+        _ tableView: UITableView,
+        viewForFooterInSection section: Int
+    ) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .clear
+        return headerView
+    }
 
+    func tableView(
+        _ tableView: UITableView,
+        heightForFooterInSection section: Int
+    ) -> CGFloat {
+        return 10
     }
 }
 
-extension WordListCollectionVC: UICollectionViewDelegateFlowLayout {
-    func collectionView(
-        _ collectionView: UICollectionView,
-        layout collectionViewLayout: UICollectionViewLayout,
-        sizeForItemAt indexPath: IndexPath
-    ) -> CGSize {
-        return CGSize(
-            width: UIScreen.main.bounds.width.subtraction(36),
-            height: 50.0)
+extension WordListTableVC: UITableViewDelegate {
+    func tableView(
+        _ tableView: UITableView,
+        didSelectRowAt indexPath: IndexPath
+    ) {
+
     }
+
+    func tableView(
+        _ tableView: UITableView,
+        heightForRowAt indexPath: IndexPath
+    ) -> CGFloat {
+        return 50.0
+    }
+    
 }
-
-

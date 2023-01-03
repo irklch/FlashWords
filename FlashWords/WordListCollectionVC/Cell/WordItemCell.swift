@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class WordItemCell: UICollectionViewCell {
+final class WordItemCell: UITableViewCell {
     static let withReuseIdentifier: String = .init(describing: WordItemCell.self)
 
     private lazy var wordLabel: UILabel = {
@@ -28,18 +28,19 @@ final class WordItemCell: UICollectionViewCell {
     }()
 
     func setupView(viewModel: WordItemCellViewModel) {
-        isSelected = false
-        backgroundColor = Asset.hex5E5E69.color
-        layer.cornerRadius = 15.0
+        backgroundColor = .clear
+        selectionStyle = .none
+        contentView.backgroundColor = Asset.hex5E5E69.color
+        contentView.layer.cornerRadius = 15.0
 
         wordLabel.text = viewModel.data.foreignWord
-        addSubview(wordLabel)
+        contentView.addSubview(wordLabel)
         wordLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(20)
         }
 
-        addSubview(arrowImageView)
+        contentView.addSubview(arrowImageView)
         arrowImageView.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(20)
             make.centerY.equalToSuperview()

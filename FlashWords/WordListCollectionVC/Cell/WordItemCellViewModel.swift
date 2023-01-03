@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftExtension
 
 struct WordItemCellViewModel {
     let data: WordsModelNonDB
