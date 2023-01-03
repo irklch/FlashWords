@@ -23,7 +23,7 @@ struct ListsModelNonDB {
 
 extension ListsModelNonDB {
     func getDBModel() -> ListsModelDB {
-        var wordsList = List<WordsModelDB>()
+        let wordsList = List<WordsModelDB>()
         wordsModel.forEach({ wordsList.append($0.getDBModel()) })
         return .init(
             id: id,

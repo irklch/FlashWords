@@ -9,7 +9,7 @@ import Foundation
 
 enum Titles {
     static let newListName: String = "New list name"
-    static let foreignWord: String = "Foreign word"
-    static let nativeWord: String = "Native word"
+    static let newWord: String = "New word"
+    static let translation: String = "Translation"
     static let add: String = "Add"
 }

@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Combine
+import SwiftExtension
 
 final class NewWordInputView: UIView {
     private let viewModel: NewWordInputViewModel
@@ -25,12 +26,8 @@ final class NewWordInputView: UIView {
         foreignTextView.font = .avenirRegular16
         foreignTextView.textColor = Asset.hex7A7A7E.color
         foreignTextView.showsVerticalScrollIndicator = false
-        foreignTextView.textContainerInset = .init(
-            top: 8.0,
-            left: 8.0,
-            bottom: 0.0,
-            right: 8.0)
-        foreignTextView.text = Titles.foreignWord
+        foreignTextView.textContainerInset = .zero
+        foreignTextView.text = Titles.newWord
         foreignTextView.delegate = self
         foreignTextView.isScrollEnabled = false
         return foreignTextView
@@ -42,12 +39,8 @@ final class NewWordInputView: UIView {
         nativeTextView.font = .avenirRegular16
         nativeTextView.textColor = Asset.hex7A7A7E.color
         nativeTextView.showsVerticalScrollIndicator = false
-        nativeTextView.textContainerInset = .init(
-            top: 8.0,
-            left: 8.0,
-            bottom: 0.0,
-            right: 8.0)
-        nativeTextView.text = Titles.nativeWord
+        nativeTextView.textContainerInset = .zero
+        nativeTextView.text = Titles.translation
         nativeTextView.delegate = self
         nativeTextView.isScrollEnabled = false
         nativeTextView.alpha = 0
@@ -114,13 +107,20 @@ final class NewWordInputView: UIView {
         }
 
         foreignTextView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+                .offset(NewWordInputViewOffsets.textViewTopOffset)
+            make.leading.trailing.equalToSuperview()
+                .inset(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
             make.height.equalTo(NewWordInputViewOffsets.textViewClosedHeight)
         }
 
+        let nativeTextViewTopOffset = NewWordInputViewOffsets.textViewBottomOffset
+            .sum(NewWordInputViewOffsets.separatorLineHeight)
+            .sum(NewWordInputViewOffsets.textViewTopOffset)
         nativeTextView.snp.makeConstraints { make in
-            make.top.equalTo(foreignTextView.snp.bottom)
+            make.top.equalTo(foreignTextView.snp.bottom).offset(nativeTextViewTopOffset)
             make.leading.trailing.equalToSuperview()
+                .inset(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
             make.height.equalTo(NewWordInputViewOffsets.textViewOpenedHeight)
         }
 
@@ -137,15 +137,15 @@ final class NewWordInputView: UIView {
         let layerWidth: CGFloat = UIScreen.main.bounds.width
             .subtraction(NewWordInputViewOffsets.inputViewLeadingTrailingOffset)
             .subtraction(NewWordInputViewOffsets.inputViewLeadingTrailingOffset)
-            .subtraction(32)
-        let layerY: CGFloat = NewWordInputViewOffsets.inputBackgroundViewTopOffset
+        let layerY: CGFloat = NewWordInputViewOffsets.textViewTopOffset
             .sum(NewWordInputViewOffsets.textViewOpenedHeight)
+            .sum(NewWordInputViewOffsets.textViewBottomOffset)
         inputBackgroundView.layer.addSublayer(separatorLineLayer)
         separatorLineLayer.frame = .init(
-            x: 16.0,
+            x: 0.0,
             y: layerY,
             width: layerWidth,
-            height: 1.0)
+            height: NewWordInputViewOffsets.separatorLineHeight)
     }
 
     @objc private func setAddWordInVocabulary() {
@@ -210,7 +210,10 @@ extension NewWordInputView: UITextViewDelegate {
     #warning("добавить расчёт высоты")
 
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        setOpenTextViews()
+        if nativeTextView.alpha == 0 {
+            setOpenTextViews()
+        }
+
         if textView.textColor == Asset.hex7A7A7E.color {
             textView.textColor = Asset.hexF2F2F2.color
             textView.text = .empty
@@ -220,10 +223,12 @@ extension NewWordInputView: UITextViewDelegate {
     }
 
     func textViewDidEndEditing(_ textView: UITextView) {
-        setCloseTextViews()
         if textView.text == .empty {
             textView.textColor = Asset.hex7A7A7E.color
-            textView.text = Titles.foreignWord
+            textView.text = Ternary.get(
+                if: .value(textView == foreignTextView),
+                true: .value(Titles.newWord),
+                false: .value(Titles.translation))
             textView.isScrollEnabled = false
         }
     }
@@ -239,6 +244,7 @@ extension NewWordInputView: UITextViewDelegate {
 //            if clearText == .empty {
                 textView.text = clearText
                 endEditing(true)
+            setCloseTextViews()
 //            } else {
 //                viewModel.newWordModel.wordsModel
 //            }
@@ -248,10 +254,21 @@ extension NewWordInputView: UITextViewDelegate {
 }
 
 enum NewWordInputViewOffsets {
-    static let textViewClosedHeight: CGFloat = 35.0
-    static let textViewOpenedHeight: CGFloat = 58.0
-    static let inputBackgroundViewClosedHeight: CGFloat = 35.0
-    static let inputBackgroundViewOpenedHeight: CGFloat = 116.0
+    static let separatorLineHeight: CGFloat = 1.0
+    static let textViewTopOffset: CGFloat = 8.0
+    static let textViewBottomOffset: CGFloat = 12.0
+    static let textViewLeadingTrailingOffset: CGFloat = 16.0
+    static let textViewClosedHeight: CGFloat = 20.0
+    static let textViewOpenedHeight: CGFloat = 50.0
+    static let inputBackgroundViewClosedHeight: CGFloat = textViewTopOffset
+        .sum(textViewClosedHeight)
+        .sum(textViewBottomOffset)
+        .sum(separatorLineHeight)
+    static let inputBackgroundViewOpenedHeight: CGFloat = textViewTopOffset
+        .sum(textViewOpenedHeight)
+        .sum(textViewBottomOffset)
+        .multiplication(2)
+        .sum(separatorLineHeight)
     static let inputBackgroundViewTopOffset: CGFloat = 8.0
     static let addWordButtonTopOffset: CGFloat = 12.0
     static let addWordButtonHeight: CGFloat = 30.0

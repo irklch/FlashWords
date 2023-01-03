@@ -42,7 +42,7 @@ final class ListsModelDB: Object {
         self.init()
         self.id = model.id
         self.listName = model.listName
-        var wordsList = List<WordsModelDB>()
+        let wordsList = List<WordsModelDB>()
         model.wordsModel.forEach({ wordsList.append($0.getDBModel()) })
         self.wordsModel = wordsList
         self.isSelected = model.isSelected
