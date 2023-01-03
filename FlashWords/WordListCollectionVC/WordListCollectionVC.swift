@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class WordListCollectionVC: UIViewController {
     private let viewModel: WordListCollectionViewModel = .init()
@@ -52,6 +53,7 @@ final class WordListCollectionVC: UIViewController {
     }()
 
     private lazy var newWordInputView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
+    private var mainThreadObserver: AnyCancellable?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,6 +61,7 @@ final class WordListCollectionVC: UIViewController {
         setupViews()
         setupHeaderConstraints()
         setupCollectionAndInputViewConstraints()
+        setupObserver()
         setKeyboardNotifications()
     }
 
@@ -111,6 +114,7 @@ final class WordListCollectionVC: UIViewController {
     }
 
     @objc private func setKeyboardWillShow(_ notification: Notification) {
+        viewModel.inputTextViewModel.mainThreadActionsState = .viewSelected
         guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
 
         UIView.animate(withDuration: 0.3) { [weak self] in
@@ -129,6 +133,7 @@ final class WordListCollectionVC: UIViewController {
     }
 
     @objc private func setKeyboardWillHide(_ notification: Notification) {
+        viewModel.inputTextViewModel.mainThreadActionsState = .viewDeselected
         UIView.animate(withDuration: 0.3) { [weak self] in
             guard let self = self else { return }
             let inputViewClosedHeight = self.viewModel.inputTextViewModel.getViewHeight(isOpened: false)
@@ -150,6 +155,20 @@ final class WordListCollectionVC: UIViewController {
         view.endEditing(true)
     }
 
+    private func setupObserver() {
+       mainThreadObserver = viewModel
+            .$mainThreadActionsState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                case .subscriptionAction:
+                    break
+                case .reloadData:
+                    self?.collectionView.reloadData()
+                }
+            }
+    }
+
 }
 
 extension WordListCollectionVC: UICollectionViewDataSource {
@@ -168,7 +187,7 @@ extension WordListCollectionVC: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(
             withReuseIdentifier: WordItemCell.withReuseIdentifier,
             for: indexPath) as? WordItemCell,
-              let wordsData = viewModel.selectedListData.wordsModel[safe: indexPath.row] else {
+              let wordsData = viewModel.selectedListData.wordsModel.reversed()[safe: indexPath.row] else {
             return .init(frame: .zero)
         }
         cell.setupView(viewModel: .init(data: wordsData))

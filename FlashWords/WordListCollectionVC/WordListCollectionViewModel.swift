@@ -7,23 +7,54 @@
 
 import Foundation
 import RealmSwift
+import Combine
 
-struct WordListCollectionViewModel {
-    private var listsData: [ListsModelNonDB] = []
-    var selectedListData: ListsModelNonDB = .emptyModel
-    var newWordModel: ListsModelNonDB = .emptyModel
-    let inputTextViewModel: NewWordInputViewModel = .init()
+final class WordListCollectionViewModel {
+    @Published var mainThreadActionsState: MainThreadActionsState = .subscriptionAction
+    var selectedListData: ListsModelNonDB
+    let inputTextViewModel: NewWordInputViewModel
+
+    private var listsData: [ListsModelNonDB]
+    private var inputViewModelObserver: AnyCancellable?
 
     init() {
+        self.inputTextViewModel = .init()
         self.listsData = Self.getListsDataItemsFromLocalStorage()
         self.selectedListData = listsData.first(where: { $0.isSelected }).nonOptional(.emptyModel)
+        setupObserver()
     }
 
-    
-//    mutating func setWrite(word: WordListModelNonDB, listName: String) {
-//        wordsData.append(word)
-//        Self.setWritingDataInLocalStorage(model: <#T##[WordListModelNonDB]#>)
-//    }
+    private func setupObserver() {
+        inputViewModelObserver = inputTextViewModel
+            .$backgroundThreadActionsState
+            .receive(on: DispatchQueue.global(qos: .background))
+            .sink { [weak self] state in
+                switch state {
+                case .subscriptionAction:
+                    break
+                case .addedWord(let wordModel):
+                    self?.setAddWord(wordModel)
+                }
+            }
+    }
+
+    private func setAddWord(_ model: WordsModelNonDB) {
+        if listsData.count > 0,
+           let listIndex = listsData.firstIndex(where: { $0.isSelected }) {
+            listsData[listIndex].wordsModel.append(model)
+            selectedListData = listsData[listIndex]
+            Self.setWritingDataInLocalStorage(lists: listsData)
+        } else {
+            let listModel: ListsModelNonDB = .init(
+                id: UUID().hashValue,
+                listName: Titles.newListName,
+                wordsModel: [model],
+                isSelected: true)
+            selectedListData = listModel
+            Self.setWritingDataInLocalStorage(lists: [listModel])
+        }
+        mainThreadActionsState = .reloadData
+    }
 
 }
 
@@ -52,5 +83,12 @@ extension WordListCollectionViewModel {
         } catch {
             print(error.localizedDescription)
         }
+    }
+}
+
+extension WordListCollectionViewModel {
+    enum MainThreadActionsState {
+        case subscriptionAction
+        case reloadData
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 
 final class ListsModelDB: Object {
-    @objc dynamic private var id: Int = 0
+    @objc dynamic var id: Int = 0
     @objc dynamic private var listName: String = .empty
     private var wordsModel = List<WordsModelDB>()
     @objc dynamic private var isSelected: Bool = false

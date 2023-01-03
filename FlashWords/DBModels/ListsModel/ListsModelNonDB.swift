@@ -16,9 +16,9 @@ struct ListsModelNonDB {
         isSelected: false)
 
     let id: Int
-    let listName: String
-    let wordsModel: [WordsModelNonDB]
-    let isSelected: Bool
+    var listName: String
+    var wordsModel: [WordsModelNonDB]
+    var isSelected: Bool
 }
 
 extension ListsModelNonDB {

@@ -149,17 +149,54 @@ final class NewWordInputView: UIView {
     }
 
     @objc private func setAddWordInVocabulary() {
-#warning("добавить событие добавления")
+        let foreignText = foreignTextView.text.textWithoutSpacePrefix()
+        let nativeText = nativeTextView.text.textWithoutSpacePrefix()
+
+        if (foreignText == .empty)
+            .or(foreignText == .space)
+            .or(nativeText == .empty)
+            .or(nativeText == .space)
+            .or(foreignTextView.textColor == Asset.hex7A7A7E.color)
+            .or(nativeTextView.textColor == Asset.hex7A7A7E.color)
+        {
+            UIView.animate(withDuration: 0.3) { [weak self] in
+                self?.addWordButton.setTitle(Titles.youNeedToWriteWords, for: .normal)
+                self?.addWordButton.setTitleColor(Asset.hexCD626F.color, for: .normal)
+                self?.addWordButton.snp.updateConstraints({ make in
+                    make.width.equalTo(NewWordInputViewOffsets.addButtonErrorWidth)
+                })
+                self?.layoutIfNeeded()
+            } completion: { [weak self] _ in
+                UIView.animate(withDuration: 0.3, delay: 2) { [weak self] in
+                    self?.addWordButton.snp.updateConstraints({ make in
+                        make.width.equalTo(NewWordInputViewOffsets.addButtonOriginalWidth)
+                    })
+                    self?.layoutIfNeeded()
+                } completion: { [weak self] _ in
+                    self?.addWordButton.setTitleColor(Asset.hex424247.color, for: .normal)
+                    self?.addWordButton.setTitle(Titles.add, for: .normal)
+                }
+            }
+
+            return
+        }
+
+        let wordModel: WordsModelNonDB = .init(
+            foreignWord: foreignText,
+            nativeWord: nativeText)
+        viewModel.backgroundThreadActionsState = .addedWord(wordModel)
+        setTextViewStartState(foreignTextView)
+        setTextViewStartState(nativeTextView)
+        endEditing(true)
     }
 
     private func setupObserver() {
         actionsObserver = viewModel
-            .$actionsState
+            .$mainThreadActionsState
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
                 switch state {
-                case .subscriptionAction,
-                        .addedWord:
+                case .subscriptionAction:
                     break
                 case .viewSelected:
                     self?.setOpenTextViews()
@@ -204,16 +241,21 @@ final class NewWordInputView: UIView {
             self.layoutIfNeeded()
         }
     }
+
+    private func setTextViewStartState(_ textView: UITextView) {
+        textView.textColor = Asset.hex7A7A7E.color
+        textView.text = Ternary.get(
+            if: .value(textView == foreignTextView),
+            true: .value(Titles.newWord),
+            false: .value(Titles.translation))
+        textView.isScrollEnabled = false
+    }
 }
 
 extension NewWordInputView: UITextViewDelegate {
     #warning("добавить расчёт высоты")
 
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
-        if nativeTextView.alpha == 0 {
-            setOpenTextViews()
-        }
-
         if textView.textColor == Asset.hex7A7A7E.color {
             textView.textColor = Asset.hexF2F2F2.color
             textView.text = .empty
@@ -224,30 +266,19 @@ extension NewWordInputView: UITextViewDelegate {
 
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text == .empty {
-            textView.textColor = Asset.hex7A7A7E.color
-            textView.text = Ternary.get(
-                if: .value(textView == foreignTextView),
-                true: .value(Titles.newWord),
-                false: .value(Titles.translation))
-            textView.isScrollEnabled = false
+            setTextViewStartState(textView)
         }
     }
 
     func textViewDidChangeSelection(_ textView: UITextView) {
-        let text = textView.text.nonOptional().textWithoutSpacePrefix()
+        let text = textView.text.textWithoutSpacePrefix()
 
         guard !text.contains(Symbols.returnCommand) else {
             let clearText = text.replacingOccurrences(
                 of: Symbols.returnCommand,
                 with: String.empty)
-
-//            if clearText == .empty {
                 textView.text = clearText
                 endEditing(true)
-            setCloseTextViews()
-//            } else {
-//                viewModel.newWordModel.wordsModel
-//            }
             return
         }
     }
@@ -275,4 +306,6 @@ enum NewWordInputViewOffsets {
     static let addWordButtonBottomOffset: CGFloat = 12.0
     static let viewClosedBottomOffset: CGFloat = 20.0
     static let inputViewLeadingTrailingOffset: CGFloat = 16.0
+    static let addButtonOriginalWidth: CGFloat = 65.0
+    static let addButtonErrorWidth: CGFloat = 230.0
 }

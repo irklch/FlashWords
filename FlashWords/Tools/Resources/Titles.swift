@@ -12,4 +12,5 @@ enum Titles {
     static let newWord: String = "New word"
     static let translation: String = "Translation"
     static let add: String = "Add"
+    static let youNeedToWriteWords = "You need to write words"
 }

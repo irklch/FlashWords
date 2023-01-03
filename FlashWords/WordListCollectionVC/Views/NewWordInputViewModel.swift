@@ -10,7 +10,8 @@ import Combine
 import SwiftExtension
 
 final class NewWordInputViewModel {
-    @Published var actionsState: ActionsState = .subscriptionAction
+    @Published var mainThreadActionsState: MainThreadActionsState = .subscriptionAction
+    @Published var backgroundThreadActionsState: BackgroundThreadActionsState = .subscriptionAction
 
     func getViewHeight(isOpened: Bool) -> CGFloat {
         return Ternary.get(
@@ -33,10 +34,14 @@ final class NewWordInputViewModel {
 }
 
 extension NewWordInputViewModel {
-    enum ActionsState {
+    enum MainThreadActionsState {
         case subscriptionAction
         case viewSelected
         case viewDeselected
+    }
+
+    enum BackgroundThreadActionsState {
+        case subscriptionAction
         case addedWord(WordsModelNonDB)
     }
 }
