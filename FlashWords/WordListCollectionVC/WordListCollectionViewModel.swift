@@ -24,6 +24,17 @@ final class WordListTableViewModel {
         setupObserver()
     }
 
+    func setDeleteItemWith(index: Int) {
+        if listsData.count > 0,
+           let listIndex = listsData.firstIndex(where: { $0.isSelected }) {
+            let index = listsData[listIndex].wordsModel.count.subtraction(1).subtraction(index)
+           listsData[listIndex].wordsModel.remove(at: index)
+            selectedListData = listsData[listIndex]
+            Self.setWritingDataInLocalStorage(lists: listsData)
+        }
+        mainThreadActionsState = .reloadData
+    }
+
     private func setupObserver() {
         inputViewModelObserver = inputTextViewModel
             .$backgroundThreadActionsState

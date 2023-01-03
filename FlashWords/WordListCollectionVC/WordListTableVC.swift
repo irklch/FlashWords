@@ -153,11 +153,18 @@ final class WordListTableVC: UIViewController {
             .$mainThreadActionsState
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
+                guard let self = self else { return }
                 switch state {
                 case .subscriptionAction:
                     break
                 case .reloadData:
-                    self?.tableView.reloadData()
+                    UIView.transition(
+                        with: self.tableView,
+                        duration: 0.1,
+                        options: .transitionCrossDissolve,
+                        animations: { [weak self] in
+                            self?.tableView.reloadData()
+                        }, completion: nil)
                 }
             }
     }
@@ -204,6 +211,21 @@ extension WordListTableVC: UITableViewDataSource {
         heightForFooterInSection section: Int
     ) -> CGFloat {
         return 10
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        editingStyleForRowAt indexPath: IndexPath
+    ) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        commit editingStyle: UITableViewCell.EditingStyle,
+        forRowAt indexPath: IndexPath
+    ) {
+        viewModel.setDeleteItemWith(index: indexPath.section)
     }
 }
 
