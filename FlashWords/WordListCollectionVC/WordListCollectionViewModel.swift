@@ -11,27 +11,22 @@ import Combine
 
 final class WordListTableViewModel {
     @Published var mainThreadActionsState: MainThreadActionsState = .subscriptionAction
-    var selectedListData: ListsModelNonDB
+    var selectedFolderInfo: FoldersModelNonDB
     let inputTextViewModel: NewWordInputViewModel
 
-    private var listsData: [ListsModelNonDB]
+    private var foldersInfo: [FoldersModelNonDB]
     private var inputViewModelObserver: AnyCancellable?
 
     init() {
         self.inputTextViewModel = .init()
-        self.listsData = Self.getListsDataItemsFromLocalStorage()
-        self.selectedListData = listsData.first(where: { $0.isSelected }).nonOptional(.emptyModel)
+        self.foldersInfo = Self.getFoldersItemsFromLocalStorage()
+        self.selectedFolderInfo = foldersInfo.first(where: { $0.isSelected }).nonOptional(.emptyModel)
         setupObserver()
     }
 
     func setDeleteItemWith(index: Int) {
-        if listsData.count > 0,
-           let listIndex = listsData.firstIndex(where: { $0.isSelected }) {
-            let index = listsData[listIndex].wordsModel.count.subtraction(1).subtraction(index)
-           listsData[listIndex].wordsModel.remove(at: index)
-            selectedListData = listsData[listIndex]
-            Self.setWritingDataInLocalStorage(lists: listsData)
-        }
+        selectedFolderInfo.wordsModel.remove(at: index)
+        Self.setWritingDataInLocalStorage(lists: foldersInfo)
         mainThreadActionsState = .reloadData
     }
 
@@ -50,19 +45,17 @@ final class WordListTableViewModel {
     }
 
     private func setAddWord(_ model: WordsModelNonDB) {
-        if listsData.count > 0,
-           let listIndex = listsData.firstIndex(where: { $0.isSelected }) {
-            listsData[listIndex].wordsModel.append(model)
-            selectedListData = listsData[listIndex]
-            Self.setWritingDataInLocalStorage(lists: listsData)
+        if foldersInfo.count > 0 {
+            selectedFolderInfo.wordsModel.append(model)
+            Self.setWritingDataInLocalStorage(lists: foldersInfo)
         } else {
-            let listModel: ListsModelNonDB = .init(
+            let folderModel: FoldersModelNonDB = .init(
                 id: UUID().hashValue,
-                listName: Titles.newListName,
+                folderName: Titles.allWords,
                 wordsModel: [model],
                 isSelected: true)
-            selectedListData = listModel
-            Self.setWritingDataInLocalStorage(lists: [listModel])
+            selectedFolderInfo = folderModel
+            Self.setWritingDataInLocalStorage(lists: [folderModel])
         }
         mainThreadActionsState = .reloadData
     }
@@ -70,10 +63,10 @@ final class WordListTableViewModel {
 }
 
 extension WordListTableViewModel {
-    static func getListsDataItemsFromLocalStorage() -> [ListsModelNonDB] {
+    static func getFoldersItemsFromLocalStorage() -> [FoldersModelNonDB] {
         do {
             let realm = try Realm()
-            let dataModels = realm.objects(ListsModelDB.self)
+            let dataModels = realm.objects(FoldersModelDB.self)
             guard !dataModels.isInvalidated else {return []}
             return dataModels.map({ (try? $0.getNonDBModel()).nonOptional(.emptyModel) })
         } catch {
@@ -81,12 +74,12 @@ extension WordListTableViewModel {
         }
     }
 
-    static func setWritingDataInLocalStorage(lists model: [ListsModelNonDB]) {
+    static func setWritingDataInLocalStorage(lists model: [FoldersModelNonDB]) {
         let dataModels = model.map({ $0.getDBModel() })
 
         do {
             let realm = try Realm()
-            let oldObject = realm.objects(ListsModelDB.self)
+            let oldObject = realm.objects(FoldersModelDB.self)
             realm.beginWrite()
             realm.delete(oldObject)
             realm.add(dataModels)

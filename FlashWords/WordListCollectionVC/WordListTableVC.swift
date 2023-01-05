@@ -14,8 +14,8 @@ final class WordListTableVC: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = Titles.newListName
-        titleLabel.font = .avenirBold36
+        titleLabel.text = Titles.allWords
+        titleLabel.font = .avenirBold28
         titleLabel.textColor = Asset.hexFCFCFC.color
         return titleLabel
     }()
@@ -173,7 +173,7 @@ final class WordListTableVC: UIViewController {
 
 extension WordListTableVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.selectedListData.wordsModel.count
+        return viewModel.selectedFolderInfo.wordsModel.count
     }
 
     func tableView(
@@ -190,7 +190,7 @@ extension WordListTableVC: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: WordItemCell.withReuseIdentifier,
             for: indexPath) as? WordItemCell,
-              let wordsData = viewModel.selectedListData.wordsModel.reversed()[safe: indexPath.section] else {
+              let wordsData = viewModel.selectedFolderInfo.wordsModel.reversed()[safe: indexPath.section] else {
             return .init(frame: .zero)
         }
         cell.setupView(viewModel: .init(data: wordsData))
@@ -225,7 +225,10 @@ extension WordListTableVC: UITableViewDataSource {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath
     ) {
-        viewModel.setDeleteItemWith(index: indexPath.section)
+        let wordIndex = viewModel.selectedFolderInfo.wordsModel.count
+            .subtraction(1)
+            .subtraction(indexPath.section)
+        viewModel.setDeleteItemWith(index: wordIndex)
     }
 }
 

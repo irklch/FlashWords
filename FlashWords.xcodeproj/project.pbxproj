@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A9281F602964A74300393585 /* ListsModelDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F5F2964A74300393585 /* ListsModelDB.swift */; };
-		A9281F632964A75600393585 /* ListsModelNonDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F622964A75600393585 /* ListsModelNonDB.swift */; };
+		A9281F602964A74300393585 /* FoldersModelDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F5F2964A74300393585 /* FoldersModelDB.swift */; };
+		A9281F632964A75600393585 /* FoldersModelNonDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F622964A75600393585 /* FoldersModelNonDB.swift */; };
 		A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73C294E0B2E0025118C /* String+Sizes.swift */; };
 		A92FE742294E748D0025118C /* UIViewController+KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */; };
 		A92FE744294E7F570025118C /* Avenir Medium.ttc in Resources */ = {isa = PBXBuildFile; fileRef = A92FE743294E7F570025118C /* Avenir Medium.ttc */; };
@@ -41,8 +41,8 @@
 /* Begin PBXFileReference section */
 		A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.release.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.release.xcconfig"; sourceTree = "<group>"; };
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		A9281F5F2964A74300393585 /* ListsModelDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsModelDB.swift; sourceTree = "<group>"; };
-		A9281F622964A75600393585 /* ListsModelNonDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsModelNonDB.swift; sourceTree = "<group>"; };
+		A9281F5F2964A74300393585 /* FoldersModelDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersModelDB.swift; sourceTree = "<group>"; };
+		A9281F622964A75600393585 /* FoldersModelNonDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersModelNonDB.swift; sourceTree = "<group>"; };
 		A92FE73C294E0B2E0025118C /* String+Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Sizes.swift"; sourceTree = "<group>"; };
 		A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KeyboardDismiss.swift"; sourceTree = "<group>"; };
 		A92FE743294E7F570025118C /* Avenir Medium.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Avenir Medium.ttc"; sourceTree = "<group>"; };
@@ -112,13 +112,13 @@
 			path = WordListModel;
 			sourceTree = "<group>";
 		};
-		A9281F612964A74800393585 /* ListsModel */ = {
+		A9281F612964A74800393585 /* FoldersModel */ = {
 			isa = PBXGroup;
 			children = (
-				A9281F5F2964A74300393585 /* ListsModelDB.swift */,
-				A9281F622964A75600393585 /* ListsModelNonDB.swift */,
+				A9281F5F2964A74300393585 /* FoldersModelDB.swift */,
+				A9281F622964A75600393585 /* FoldersModelNonDB.swift */,
 			);
-			path = ListsModel;
+			path = FoldersModel;
 			sourceTree = "<group>";
 		};
 		A92FE73B294E0AA10025118C /* Resources */ = {
@@ -194,7 +194,7 @@
 			isa = PBXGroup;
 			children = (
 				A9281F5E2964A72E00393585 /* WordListModel */,
-				A9281F612964A74800393585 /* ListsModel */,
+				A9281F612964A74800393585 /* FoldersModel */,
 			);
 			path = DBModels;
 			sourceTree = "<group>";
@@ -387,8 +387,8 @@
 				A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */,
 				A92FE746294E82CB0025118C /* Symbols.swift in Sources */,
 				A9C944272964E5E30092B02F /* NewWordInputView.swift in Sources */,
-				A9281F602964A74300393585 /* ListsModelDB.swift in Sources */,
-				A9281F632964A75600393585 /* ListsModelNonDB.swift in Sources */,
+				A9281F602964A74300393585 /* FoldersModelDB.swift in Sources */,
+				A9281F632964A75600393585 /* FoldersModelNonDB.swift in Sources */,
 				A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */,
 				A9C944282964E5E30092B02F /* NewWordInputViewModel.swift in Sources */,
 				A9EDB7EE2957325B001CDE86 /* WordsModelNonDB.swift in Sources */,
