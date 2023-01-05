@@ -8,5 +8,5 @@
 import Foundation
 
 struct WordItemCellViewModel {
-    let data: WordsModelNonDB
+    let name: String
 }

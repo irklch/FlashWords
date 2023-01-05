@@ -19,14 +19,14 @@ final class WordListTableViewModel {
 
     init() {
         self.inputTextViewModel = .init()
-        self.foldersInfo = Self.getFoldersItemsFromLocalStorage()
+        self.foldersInfo = StorageManager.getFoldersItemsFromLocalStorage()
         self.selectedFolderInfo = foldersInfo.first(where: { $0.isSelected }).nonOptional(.emptyModel)
         setupObserver()
     }
 
     func setDeleteItemWith(index: Int) {
         selectedFolderInfo.wordsModel.remove(at: index)
-        Self.setWritingDataInLocalStorage(lists: foldersInfo)
+        StorageManager.setRewritingDataInLocalStorage(lists: foldersInfo)
         mainThreadActionsState = .reloadData
     }
 
@@ -45,49 +45,11 @@ final class WordListTableViewModel {
     }
 
     private func setAddWord(_ model: WordsModelNonDB) {
-        if foldersInfo.count > 0 {
-            selectedFolderInfo.wordsModel.append(model)
-            Self.setWritingDataInLocalStorage(lists: foldersInfo)
-        } else {
-            let folderModel: FoldersModelNonDB = .init(
-                id: UUID().hashValue,
-                folderName: Titles.allWords,
-                wordsModel: [model],
-                isSelected: true)
-            selectedFolderInfo = folderModel
-            Self.setWritingDataInLocalStorage(lists: [folderModel])
-        }
+        selectedFolderInfo.wordsModel.append(model)
+        StorageManager.setRewritingDataInLocalStorage(lists: foldersInfo)
         mainThreadActionsState = .reloadData
     }
 
-}
-
-extension WordListTableViewModel {
-    static func getFoldersItemsFromLocalStorage() -> [FoldersModelNonDB] {
-        do {
-            let realm = try Realm()
-            let dataModels = realm.objects(FoldersModelDB.self)
-            guard !dataModels.isInvalidated else {return []}
-            return dataModels.map({ (try? $0.getNonDBModel()).nonOptional(.emptyModel) })
-        } catch {
-            return []
-        }
-    }
-
-    static func setWritingDataInLocalStorage(lists model: [FoldersModelNonDB]) {
-        let dataModels = model.map({ $0.getDBModel() })
-
-        do {
-            let realm = try Realm()
-            let oldObject = realm.objects(FoldersModelDB.self)
-            realm.beginWrite()
-            realm.delete(oldObject)
-            realm.add(dataModels)
-            try realm.commitWrite()
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
 }
 
 extension WordListTableViewModel {

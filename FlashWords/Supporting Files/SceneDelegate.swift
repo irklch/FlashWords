@@ -17,7 +17,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        let viewController = WordListTableVC()
+        let viewController = UINavigationController()
+        viewController.viewControllers = [FoldersVC(), WordListTableVC()]
+        UIBarButtonItem.appearance().setTitleTextAttributes(
+            [NSAttributedString.Key.font: UIFont.avenirMedium18], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes(
+            [NSAttributedString.Key.font: UIFont.avenirMedium18], for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes(
+            [NSAttributedString.Key.font: UIFont.avenirMedium18], for: .focused)
         window?.rootViewController = viewController
         window?.makeKeyAndVisible()
     }

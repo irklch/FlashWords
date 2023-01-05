@@ -33,7 +33,7 @@ final class WordItemCell: UITableViewCell {
         contentView.backgroundColor = Asset.hex5E5E69.color
         contentView.layer.cornerRadius = 15.0
 
-        wordLabel.text = viewModel.data.foreignWord
+        wordLabel.text = viewModel.name
         contentView.addSubview(wordLabel)
         wordLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()

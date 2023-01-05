@@ -34,23 +34,13 @@ final class WordListTableVC: UIViewController {
         return tableView
     }()
 
-    private lazy var addListButton: UIButton = {
-        let addListButton = UIButton()
-        addListButton.setImage(Images.plus, for: .normal)
-        addListButton.tintColor = Asset.hexFCFCFC.color
-        addListButton.addTarget(
-            self,
-            action: #selector(setAddNewList),
-            for: .touchUpInside)
-        return addListButton
-    }()
-
     private lazy var newWordInputView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
     private var mainThreadObserver: AnyCancellable?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Asset.hex333337.color
+        setupNavigationBar()
         setupViews()
         setupHeaderConstraints()
         setupCollectionAndInputViewConstraints()
@@ -58,10 +48,14 @@ final class WordListTableVC: UIViewController {
         setKeyboardNotifications()
     }
 
+    private func setupNavigationBar() {
+        navigationController?.navigationBar.tintColor = Asset.hexFCFCFC.color
+        navigationController?.navigationBar.backItem?.title = Titles.folders
+    }
+
     private func setupViews() {
         view.addSubview(titleLabel)
         view.addSubview(tableView)
-        view.addSubview(addListButton)
         view.addSubview(newWordInputView)
     }
 
@@ -69,12 +63,6 @@ final class WordListTableVC: UIViewController {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
-        }
-
-        addListButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(16)
-            make.centerY.equalTo(titleLabel.snp.centerY)
-            make.height.width.equalTo(30)
         }
     }
 
@@ -140,10 +128,6 @@ final class WordListTableVC: UIViewController {
         }
     }
 
-    @objc private func setAddNewList() {
-#warning("добавить событие добавления листа")
-    }
-
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         view.endEditing(true)
     }
@@ -193,7 +177,7 @@ extension WordListTableVC: UITableViewDataSource {
               let wordsData = viewModel.selectedFolderInfo.wordsModel.reversed()[safe: indexPath.section] else {
             return .init(frame: .zero)
         }
-        cell.setupView(viewModel: .init(data: wordsData))
+        cell.setupView(viewModel: .init(name: wordsData.foreignWord))
         return cell
     }
 

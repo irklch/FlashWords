@@ -13,6 +13,9 @@
 		A92FE742294E748D0025118C /* UIViewController+KeyboardDismiss.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */; };
 		A92FE744294E7F570025118C /* Avenir Medium.ttc in Resources */ = {isa = PBXBuildFile; fileRef = A92FE743294E7F570025118C /* Avenir Medium.ttc */; };
 		A92FE746294E82CB0025118C /* Symbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE745294E82CB0025118C /* Symbols.swift */; };
+		A96F74E42967303B0066F668 /* FoldersVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F74E32967303B0066F668 /* FoldersVC.swift */; };
+		A96F74E72967305D0066F668 /* FoldersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F74E62967305D0066F668 /* FoldersViewModel.swift */; };
+		A96F74E9296732490066F668 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F74E8296732490066F668 /* StorageManager.swift */; };
 		A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9C152F7294A6BC6004A0662 /* Colors.xcassets */; };
 		A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FA294A6FB3004A0662 /* Colors.swift */; };
 		A9C152FD294A7613004A0662 /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FC294A7613004A0662 /* Titles.swift */; };
@@ -47,6 +50,9 @@
 		A92FE741294E748D0025118C /* UIViewController+KeyboardDismiss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KeyboardDismiss.swift"; sourceTree = "<group>"; };
 		A92FE743294E7F570025118C /* Avenir Medium.ttc */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Avenir Medium.ttc"; sourceTree = "<group>"; };
 		A92FE745294E82CB0025118C /* Symbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Symbols.swift; sourceTree = "<group>"; };
+		A96F74E32967303B0066F668 /* FoldersVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersVC.swift; sourceTree = "<group>"; };
+		A96F74E62967305D0066F668 /* FoldersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersViewModel.swift; sourceTree = "<group>"; };
+		A96F74E8296732490066F668 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		A9C152F7294A6BC6004A0662 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A9C152FA294A6FB3004A0662 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A9C152FC294A7613004A0662 /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
@@ -141,6 +147,23 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		A96F74E5296730460066F668 /* FoldersVC */ = {
+			isa = PBXGroup;
+			children = (
+				A96F74E32967303B0066F668 /* FoldersVC.swift */,
+				A96F74E62967305D0066F668 /* FoldersViewModel.swift */,
+			);
+			path = FoldersVC;
+			sourceTree = "<group>";
+		};
+		A96F74EA2967324E0066F668 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				A96F74E8296732490066F668 /* StorageManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 		A9C152F9294A6F63004A0662 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,6 +218,7 @@
 			children = (
 				A9281F5E2964A72E00393585 /* WordListModel */,
 				A9281F612964A74800393585 /* FoldersModel */,
+				A96F74EA2967324E0066F668 /* Managers */,
 			);
 			path = DBModels;
 			sourceTree = "<group>";
@@ -222,6 +246,7 @@
 			children = (
 				A9F9DCC1294A64AD00055BEF /* Tools */,
 				A9EDB7EA29573205001CDE86 /* DBModels */,
+				A96F74E5296730460066F668 /* FoldersVC */,
 				A9C944182964E5E30092B02F /* WordListCollectionVC */,
 				A9F9DCC4294A64B300055BEF /* Supporting Files */,
 			);
@@ -381,9 +406,12 @@
 				A9C1530C294A868A004A0662 /* Images.swift in Sources */,
 				A9C944242964E5E30092B02F /* WordItemCellViewModel.swift in Sources */,
 				A9C152FD294A7613004A0662 /* Titles.swift in Sources */,
+				A96F74E42967303B0066F668 /* FoldersVC.swift in Sources */,
 				A9F9DCC3294A64AD00055BEF /* Fonts.swift in Sources */,
 				A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */,
+				A96F74E9296732490066F668 /* StorageManager.swift in Sources */,
 				A92FE742294E748D0025118C /* UIViewController+KeyboardDismiss.swift in Sources */,
+				A96F74E72967305D0066F668 /* FoldersViewModel.swift in Sources */,
 				A9F9DCA8294A623100055BEF /* AppDelegate.swift in Sources */,
 				A92FE746294E82CB0025118C /* Symbols.swift in Sources */,
 				A9C944272964E5E30092B02F /* NewWordInputView.swift in Sources */,

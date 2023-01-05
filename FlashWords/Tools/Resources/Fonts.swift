@@ -10,11 +10,21 @@ import SwiftExtension
 
 extension UIFont {
     static let systemRegular16: UIFont = .systemFont(ofSize: 16, weight: .regular)
-    static let avenirBold18: UIFont = (UIFont.init(name: "Avenir Black", size: 18)).nonOptional(.systemRegular16)
-    static let avenirBold28: UIFont = (UIFont.init(name: "Avenir Black", size: 28)).nonOptional(.systemRegular16)
-    static let avenirBold36: UIFont = (UIFont.init(name: "Avenir Black", size: 36)).nonOptional(.systemRegular16)
-    static let avenirRegular12: UIFont = (UIFont.init(name: "Avenir", size: 12)).nonOptional(.systemRegular16)
-    static let avenirRegular16: UIFont = (UIFont.init(name: "Avenir", size: 16)).nonOptional(.systemRegular16)
-    static let avenirMedium16: UIFont = (UIFont.init(name: "Avenir Medium", size: 16)).nonOptional(.systemRegular16)
+    static let avenirRegular12: UIFont = (UIFont.init(name: "Avenir", size: 12))
+        .nonOptional(.systemRegular16)
+    static let avenirRegular16: UIFont = (UIFont.init(name: "Avenir", size: 16))
+        .nonOptional(.systemRegular16)
+    static let avenirRegular18: UIFont = (UIFont.init(name: "Avenir", size: 18))
+        .nonOptional(.systemRegular16)
+    static let avenirMedium16: UIFont = (UIFont.init(name: "Avenir Medium", size: 16))
+        .nonOptional(.systemRegular16)
+    static let avenirMedium18: UIFont = (UIFont.init(name: "Avenir Medium", size: 18))
+        .nonOptional(.systemRegular16)
+    static let avenirBold18: UIFont = (UIFont.init(name: "Avenir Black", size: 18))
+        .nonOptional(.systemRegular16)
+    static let avenirBold28: UIFont = (UIFont.init(name: "Avenir Black", size: 28))
+        .nonOptional(.systemRegular16)
+    static let avenirBold36: UIFont = (UIFont.init(name: "Avenir Black", size: 36))
+        .nonOptional(.systemRegular16)
 
 }
