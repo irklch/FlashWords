@@ -8,6 +8,7 @@
 import UIKit
 import SnapKit
 import Combine
+import SwiftExtension
 
 final class FoldersVC: UIViewController {
     private let viewModel: FoldersViewModel = .init()
@@ -45,6 +46,19 @@ final class FoldersVC: UIViewController {
         return tableView
     }()
 
+    private lazy var newFolderTextView: UITextView = {
+        let newFolderTextView = UITextView()
+        newFolderTextView.backgroundColor = .clear
+        newFolderTextView.font = .avenirBold28
+        newFolderTextView.textColor = Asset.hexFCFCFC.color
+        newFolderTextView.showsVerticalScrollIndicator = false
+        newFolderTextView.textContainerInset = .zero
+        newFolderTextView.delegate = self
+        newFolderTextView.isScrollEnabled = false
+        newFolderTextView.isUserInteractionEnabled = false
+        return newFolderTextView
+    }()
+
     private var actionObserver: AnyCancellable?
 
     override func viewDidLoad() {
@@ -55,16 +69,28 @@ final class FoldersVC: UIViewController {
         setupConstraints()
         setupObserver()
     }
+
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.setUpdateData()
+    }
+
     private func setupViews() {
         view.addSubview(titleLabel)
         view.addSubview(addListButton)
         view.addSubview(tableView)
+        view.addSubview(newFolderTextView)
     }
 
     private func setupConstraints() {
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
+        }
+
+        newFolderTextView.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(50)
+            make.top.height.equalTo(titleLabel)
+            make.leading.equalToSuperview().offset(13)
         }
 
         addListButton.snp.makeConstraints { make in
@@ -85,17 +111,49 @@ final class FoldersVC: UIViewController {
             .$mainThreadActionState
             .receive(on: DispatchQueue.main)
             .sink(receiveValue: { [weak self] state in
+                guard let self = self else { return }
                 switch state {
                 case .subscriptionAction:
                     break
                 case .reloadData:
-                    self?.tableView.reloadData()
+                    UIView.transition(
+                        with: self.tableView,
+                        duration: 0.1,
+                        options: .transitionCrossDissolve,
+                        animations: { [weak self] in
+                            self?.tableView.reloadData()
+                        }, completion: nil)
                 }
             })
     }
 
     @objc private func setAddNewList() {
-#warning("добавить событие добавления листа")
+        if addListButton.currentImage == Images.plus {
+            UIView.animate(withDuration: 0.1) { [weak self] in
+                self?.addListButton.setImage(Images.checkmark, for: .normal)
+                self?.titleLabel.text = "New folder name"
+                self?.titleLabel.textColor = Asset.hex5E5E69.color
+                self?.newFolderTextView.alpha = 1
+                self?.view.layoutIfNeeded()
+            }
+            newFolderTextView.isUserInteractionEnabled = true
+            newFolderTextView.becomeFirstResponder()
+        } else {
+            if newFolderTextView.text.textWithoutSpacePrefix() != .empty {
+                viewModel.setSaveNewFolder(name: newFolderTextView.text.textWithoutSpacePrefix())
+            }
+            UIView.animate(withDuration: 0.1) { [weak self] in
+                self?.addListButton.setImage(Images.plus, for: .normal)
+                self?.newFolderTextView.alpha = 0
+                self?.titleLabel.text = Titles.folders
+                self?.titleLabel.textColor = Asset.hexFCFCFC.color
+                self?.titleLabel.alpha = 1
+                self?.view.layoutIfNeeded()
+            }
+            newFolderTextView.text = .empty
+            newFolderTextView.isUserInteractionEnabled = false
+            view.endEditing(true)
+        }
     }
 
 }
@@ -119,7 +177,7 @@ extension FoldersVC: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: WordItemCell.withReuseIdentifier,
             for: indexPath) as? WordItemCell,
-              let foldersData = viewModel.foldersData.reversed()[safe: indexPath.section] else {
+              let foldersData = viewModel.foldersData[safe: indexPath.section] else {
             return .init(frame: .zero)
         }
         cell.setupView(viewModel: .init(name: foldersData.folderName))
@@ -154,10 +212,7 @@ extension FoldersVC: UITableViewDataSource {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath
     ) {
-        let wordIndex = viewModel.foldersData.count
-            .subtraction(1)
-            .subtraction(indexPath.section)
-//        viewModel.setDeleteItemWith(index: wordIndex)
+        viewModel.setDeleteFolder(index: indexPath.section)
     }
 }
 
@@ -166,10 +221,8 @@ extension FoldersVC: UITableViewDelegate {
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
     ) {
-        let folderIndex = viewModel.foldersData.count
-            .subtraction(1)
-            .subtraction(indexPath.section)
-        viewModel.setSelectFolder(index: folderIndex)
+        view.endEditing(true)
+        viewModel.setSelectFolder(index: indexPath.section)
         navigationController?.pushViewController(WordListTableVC(), animated: true)
     }
 
@@ -182,3 +235,32 @@ extension FoldersVC: UITableViewDelegate {
 
 }
 
+extension FoldersVC: UITextViewDelegate {
+
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        if textView.textColor == Asset.hex7A7A7E.color {
+            textView.textColor = Asset.hexF2F2F2.color
+            textView.text = .empty
+            textView.isScrollEnabled = true
+        }
+        return true
+    }
+
+    func textViewDidChangeSelection(_ textView: UITextView) {
+        let text = textView.text.textWithoutSpacePrefix()
+        textView.text = text
+        guard !text.contains(Symbols.returnCommand) else {
+            let clearText = text.replacingOccurrences(
+                of: Symbols.returnCommand,
+                with: String.empty)
+                textView.text = clearText
+            view.endEditing(true)
+            return
+        }
+
+        titleLabel.alpha = Ternary.get(
+            if: .value(text == .empty),
+            true: .value(1),
+            false: .value(0))
+    }
+}

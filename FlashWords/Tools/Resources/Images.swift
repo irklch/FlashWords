@@ -32,4 +32,8 @@ enum Images {
         systemName: "plus.circle.fill",
         withConfiguration: largeConfig)?
         .withRenderingMode(.alwaysTemplate)
+    static let checkmark: UIImage? = .init(
+        systemName: "checkmark.circle.fill",
+        withConfiguration: largeConfig)?
+        .withRenderingMode(.alwaysTemplate)
 }

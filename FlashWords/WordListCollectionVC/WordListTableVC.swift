@@ -14,7 +14,7 @@ final class WordListTableVC: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = Titles.allWords
+        titleLabel.text = viewModel.selectedFolderInfo.folderName
         titleLabel.font = .avenirBold28
         titleLabel.textColor = Asset.hexFCFCFC.color
         return titleLabel
@@ -46,6 +46,11 @@ final class WordListTableVC: UIViewController {
         setupCollectionAndInputViewConstraints()
         setupObserver()
         setKeyboardNotifications()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        view.endEditing(true)
     }
 
     private func setupNavigationBar() {

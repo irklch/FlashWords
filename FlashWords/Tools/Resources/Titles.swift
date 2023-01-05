@@ -14,4 +14,5 @@ enum Titles {
     static let add: String = "Add"
     static let youNeedToWriteWords = "You need to write words"
     static let folders = "Folders"
+    static let addNewFolder = "Add new folder"
 }
