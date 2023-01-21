@@ -138,7 +138,8 @@ final class FoldersTableVC: UIViewController {
             newFolderTextField.isUserInteractionEnabled = true
             newFolderTextField.becomeFirstResponder()
         } else {
-            if let textFieldText = newFolderTextField.text?.textWithoutSpacePrefix() {
+            if let textFieldText = newFolderTextField.text?.textWithoutSpacePrefix(),
+               textFieldText != .empty {
                 viewModel.setSaveNewFolder(name: textFieldText)
             }
             UIView.animate(withDuration: 0.1) { [weak self] in
