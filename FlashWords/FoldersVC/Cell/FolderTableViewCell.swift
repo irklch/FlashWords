@@ -1,23 +1,23 @@
 //
-//  WordItemCell.swift
+//  FolderTableViewCell.swift
 //  FlashWords
 //
-//  Created by Ирина Кольчугина on 15.12.2022.
+//  Created by Ирина Кольчугина on 22.01.2023.
 //
 
 import UIKit
 import SnapKit
 
-final class WordItemCell: UITableViewCell {
-    static let withReuseIdentifier: String = .init(describing: WordItemCell.self)
+final class FolderTableViewCell: UITableViewCell {
+    static let withReuseIdentifier: String = .init(describing: FolderTableViewCell.self)
 
-    private lazy var wordLabel: UILabel = {
-        let wordLabel = UILabel()
-        wordLabel.lineBreakMode = .byTruncatingTail
-        wordLabel.font = .avenirBold18
-        wordLabel.textColor = Asset.hexFCFCFC.color
-        wordLabel.textAlignment = .left
-        return wordLabel
+    private lazy var folderLabel: UILabel = {
+        let folderLabel = UILabel()
+        folderLabel.lineBreakMode = .byTruncatingTail
+        folderLabel.font = .avenirBold18
+        folderLabel.textColor = Asset.hexFCFCFC.color
+        folderLabel.textAlignment = .left
+        return folderLabel
     }()
 
     private lazy var arrowImageView: UIImageView = {
@@ -27,15 +27,15 @@ final class WordItemCell: UITableViewCell {
         return arrowImageView
     }()
 
-    func setupView(viewModel: WordItemCellViewModel) {
+    func setupView(viewModel: FolderTableViewCellViewModel) {
         backgroundColor = .clear
         selectionStyle = .none
         contentView.backgroundColor = Asset.hex5E5E69.color
         contentView.layer.cornerRadius = 15.0
 
-        wordLabel.text = viewModel.name
-        contentView.addSubview(wordLabel)
-        wordLabel.snp.makeConstraints { make in
+        folderLabel.text = viewModel.name
+        contentView.addSubview(folderLabel)
+        folderLabel.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.trailing.equalToSuperview().inset(20)
         }
@@ -46,4 +46,5 @@ final class WordItemCell: UITableViewCell {
             make.centerY.equalToSuperview()
         }
     }
+
 }

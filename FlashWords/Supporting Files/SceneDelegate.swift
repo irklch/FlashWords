@@ -22,8 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let folders = StorageManager.getFoldersItemsFromLocalStorage()
         let viewControllers: [UIViewController] = Ternary.get(
             if: .value((folders.count == 0).or(folders.first(where: { $0.isSelected }) == nil)),
-            true: .value([FoldersVC()]),
-            false: .value([FoldersVC(), WordListTableVC()]))
+            true: .value([FoldersTableVC()]),
+            false: .value([FoldersTableVC(), WordListTableVC()]))
         viewController.viewControllers = viewControllers
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [NSAttributedString.Key.font: UIFont.avenirMedium18], for: .normal)

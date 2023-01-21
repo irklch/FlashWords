@@ -30,11 +30,13 @@ final class WordListTableVC: UIViewController {
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
         tableView.register(
-            WordItemCell.self, 
-            forCellReuseIdentifier: WordItemCell.withReuseIdentifier)
+            WordTableViewCell.self, 
+            forCellReuseIdentifier: WordTableViewCell.withReuseIdentifier)
         tableView.backgroundColor = .clear
         tableView.bounces = true
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        tableView.separatorColor = Asset.hexFCFCFC.color
+        tableView.separatorInset = .zero
         return tableView
     }()
 
@@ -83,7 +85,7 @@ final class WordListTableVC: UIViewController {
             true: .value(0.0),
             false: .value(viewModel.inputTextViewModel.getViewHeight(isOpened: false)))
         tableView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(16)
+            make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().offset(-inputViewHeight)
         }
@@ -195,8 +197,8 @@ extension WordListTableVC: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: WordItemCell.withReuseIdentifier,
-            for: indexPath) as? WordItemCell else {
+            withIdentifier: WordTableViewCell.withReuseIdentifier,
+            for: indexPath) as? WordTableViewCell else {
             return .init(frame: .zero)
         }
         let allWordsData = (viewModel.allFoldersInfo[safe: indexPath.section]?
@@ -210,25 +212,13 @@ extension WordListTableVC: UITableViewDataSource {
             if: .value(viewModel.isAllWordsFolder),
             true: .value(allWordsData.foreignWord),
             false: .value(selectedWordsData.foreignWord))
-        cell.setupView(viewModel: .init(name: wordForeignTitle))
+        let wordNativeTitle = Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(allWordsData.nativeWord),
+            false: .value(selectedWordsData.nativeWord))
+        cell.setupView(viewModel: .init(foreignWord: wordForeignTitle, nativeWord: wordNativeTitle))
 
         return cell
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        viewForFooterInSection section: Int
-    ) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        heightForFooterInSection section: Int
-    ) -> CGFloat {
-        return 10
     }
 
     func tableView(
@@ -278,7 +268,7 @@ extension WordListTableVC: UITableViewDelegate {
         _ tableView: UITableView,
         heightForRowAt indexPath: IndexPath
     ) -> CGFloat {
-        return 50.0
+        return 82.0
     }
     
 }

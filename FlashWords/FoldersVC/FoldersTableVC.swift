@@ -1,5 +1,5 @@
 //
-//  FoldersVC.swift
+//  FoldersTableVC.swift
 //  FlashWords
 //
 //  Created by Ирина Кольчугина on 05.01.2023.
@@ -10,8 +10,8 @@ import SnapKit
 import Combine
 import SwiftExtension
 
-final class FoldersVC: UIViewController {
-    private let viewModel: FoldersViewModel = .init()
+final class FoldersTableVC: UIViewController {
+    private let viewModel: FoldersTableViewModel = .init()
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -38,8 +38,8 @@ final class FoldersVC: UIViewController {
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
         tableView.register(
-            WordItemCell.self,
-            forCellReuseIdentifier: WordItemCell.withReuseIdentifier)
+            FolderTableViewCell.self,
+            forCellReuseIdentifier: FolderTableViewCell.withReuseIdentifier)
         tableView.backgroundColor = .clear
         tableView.bounces = true
         tableView.separatorStyle = .none
@@ -53,6 +53,8 @@ final class FoldersVC: UIViewController {
         newFolderTextField.textColor = Asset.hexFCFCFC.color
         newFolderTextField.delegate = self
         newFolderTextField.isUserInteractionEnabled = false
+        newFolderTextField.returnKeyType = .done
+        newFolderTextField.enablesReturnKeyAutomatically = true
         return newFolderTextField
     }()
 
@@ -156,7 +158,7 @@ final class FoldersVC: UIViewController {
 
 }
 
-extension FoldersVC: UITableViewDataSource {
+extension FoldersTableVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         return viewModel.foldersData.count.sum(1)
     }
@@ -173,8 +175,8 @@ extension FoldersVC: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: WordItemCell.withReuseIdentifier,
-            for: indexPath) as? WordItemCell else {
+            withIdentifier: FolderTableViewCell.withReuseIdentifier,
+            for: indexPath) as? FolderTableViewCell else {
             return .init(frame: .zero)
         }
         if indexPath.section == 0 {
@@ -225,7 +227,7 @@ extension FoldersVC: UITableViewDataSource {
     }
 }
 
-extension FoldersVC: UITableViewDelegate {
+extension FoldersTableVC: UITableViewDelegate {
     func tableView(
         _ tableView: UITableView,
         didSelectRowAt indexPath: IndexPath
@@ -246,7 +248,7 @@ extension FoldersVC: UITableViewDelegate {
 
 }
 
-extension FoldersVC: UITextFieldDelegate {
+extension FoldersTableVC: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let text = textField.text?.textWithoutSpacePrefix(),
               !text.contains(Symbols.returnCommand) else {
@@ -263,6 +265,12 @@ extension FoldersVC: UITextFieldDelegate {
             if: .value(text == .empty),
             true: .value(1),
             false: .value(0))
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        setAddNewList()
+        view.endEditing(true)
+        return true
     }
 
 }

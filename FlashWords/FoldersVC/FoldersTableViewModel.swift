@@ -1,5 +1,5 @@
 //
-//  FoldersViewModel.swift
+//  FoldersTableViewModel.swift
 //  FlashWords
 //
 //  Created by Ирина Кольчугина on 05.01.2023.
@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class FoldersViewModel {
+final class FoldersTableViewModel {
     @Published var mainThreadActionState: MainThreadActionsState = .subscriptionAction
     var foldersData: [FoldersModelNonDB]
 
@@ -45,7 +45,7 @@ final class FoldersViewModel {
     }
 }
 
-extension FoldersViewModel {
+extension FoldersTableViewModel {
     enum MainThreadActionsState {
         case subscriptionAction
         case reloadData
