@@ -13,20 +13,32 @@ final class WordListTableViewModel {
     @Published var mainThreadActionsState: MainThreadActionsState = .subscriptionAction
     var selectedFolderInfo: FoldersModelNonDB
     let inputTextViewModel: NewWordInputViewModel
+    var isAllWordsFolder: Bool
 
-    private var foldersInfo: [FoldersModelNonDB]
+    var allFoldersInfo: [FoldersModelNonDB]
     private var inputViewModelObserver: AnyCancellable?
 
-    init() {
+    init(isAllWordsFolder: Bool) {
+        self.isAllWordsFolder = isAllWordsFolder
         self.inputTextViewModel = .init()
-        self.foldersInfo = StorageManager.getFoldersItemsFromLocalStorage()
-        self.selectedFolderInfo = foldersInfo.first(where: { $0.isSelected }).nonOptional(.emptyModel)
+        self.allFoldersInfo = StorageManager.getFoldersItemsFromLocalStorage()
+        if let selectedFolderInfo = allFoldersInfo.first(where: { $0.isSelected }) {
+            self.selectedFolderInfo = selectedFolderInfo
+            self.isAllWordsFolder = isAllWordsFolder
+        } else {
+            self.selectedFolderInfo = .emptyModel
+            self.isAllWordsFolder = true
+        }
         setupObserver()
     }
 
-    func setDeleteItemWith(index: Int) {
-        selectedFolderInfo.wordsModel.remove(at: index)
-        StorageManager.setRewritingDataInLocalStorage(lists: foldersInfo)
+    func setDeleteItemWith(indexPath: IndexPath) {
+        if isAllWordsFolder {
+            allFoldersInfo[indexPath.section].wordsModel.remove(at: indexPath.row)
+        } else {
+            selectedFolderInfo.wordsModel.remove(at: indexPath.row)
+        }
+        StorageManager.setRewritingDataInLocalStorage(lists: allFoldersInfo)
         mainThreadActionsState = .reloadData
     }
 
@@ -46,7 +58,7 @@ final class WordListTableViewModel {
 
     private func setAddWord(_ model: WordsModelNonDB) {
         selectedFolderInfo.wordsModel.append(model)
-        StorageManager.setRewritingDataInLocalStorage(lists: foldersInfo)
+        StorageManager.setRewritingDataInLocalStorage(lists: allFoldersInfo)
         mainThreadActionsState = .reloadData
     }
 

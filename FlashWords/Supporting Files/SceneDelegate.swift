@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let viewController = UINavigationController()
-        viewController.viewControllers = [FoldersVC(), WordListTableVC()]
+        viewController.viewControllers = [FoldersVC(), WordListTableVC(viewModel: .init(isAllWordsFolder: true))]
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [NSAttributedString.Key.font: UIFont.avenirMedium18], for: .normal)
         UIBarButtonItem.appearance().setTitleTextAttributes(

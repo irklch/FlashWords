@@ -8,13 +8,17 @@
 import UIKit
 import SnapKit
 import Combine
+import SwiftExtension
 
 final class WordListTableVC: UIViewController {
-    private let viewModel: WordListTableViewModel = .init()
+    private let viewModel: WordListTableViewModel
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = viewModel.selectedFolderInfo.folderName
+        titleLabel.text = Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(Titles.allWords),
+            false: .value(viewModel.selectedFolderInfo.folderName)) 
         titleLabel.font = .avenirBold28
         titleLabel.textColor = Asset.hexFCFCFC.color
         return titleLabel
@@ -36,6 +40,15 @@ final class WordListTableVC: UIViewController {
 
     private lazy var newWordInputView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
     private var mainThreadObserver: AnyCancellable?
+
+    init(viewModel: WordListTableViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,7 +74,6 @@ final class WordListTableVC: UIViewController {
     private func setupViews() {
         view.addSubview(titleLabel)
         view.addSubview(tableView)
-        view.addSubview(newWordInputView)
     }
 
     private func setupHeaderConstraints() {
@@ -72,16 +84,21 @@ final class WordListTableVC: UIViewController {
     }
 
     private func setupCollectionAndInputViewConstraints() {
-        let inputViewHeight = viewModel.inputTextViewModel.getViewHeight(isOpened: false)
+        let inputViewHeight = Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(0.0),
+            false: .value(viewModel.inputTextViewModel.getViewHeight(isOpened: false)))
         tableView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().offset(-inputViewHeight)
         }
-
-        newWordInputView.snp.makeConstraints { make in
-            make.bottom.leading.trailing.equalToSuperview()
-            make.height.equalTo(inputViewHeight)
+        if !viewModel.isAllWordsFolder {
+            view.addSubview(newWordInputView)
+            newWordInputView.snp.makeConstraints { make in
+                make.bottom.leading.trailing.equalToSuperview()
+                make.height.equalTo(inputViewHeight)
+            }
         }
     }
 
@@ -162,14 +179,21 @@ final class WordListTableVC: UIViewController {
 
 extension WordListTableVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.selectedFolderInfo.wordsModel.count
+        return Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(viewModel.allFoldersInfo.count),
+            false: .value(1))
     }
 
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return 1
+        let allWordsSectionCount = (viewModel.allFoldersInfo[safe: section]?.wordsModel.count).nonOptional()
+        return Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(allWordsSectionCount),
+            false: .value(viewModel.selectedFolderInfo.wordsModel.count))
     }
 
     func tableView(
@@ -178,11 +202,22 @@ extension WordListTableVC: UITableViewDataSource {
     ) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: WordItemCell.withReuseIdentifier,
-            for: indexPath) as? WordItemCell,
-              let wordsData = viewModel.selectedFolderInfo.wordsModel.reversed()[safe: indexPath.section] else {
+            for: indexPath) as? WordItemCell else {
             return .init(frame: .zero)
         }
-        cell.setupView(viewModel: .init(name: wordsData.foreignWord))
+        let allWordsData = (viewModel.allFoldersInfo[safe: indexPath.section]?
+            .wordsModel.reversed()[safe: indexPath.row]
+        ).nonOptional(.emptyModel)
+        let selectedWordsData = (viewModel.selectedFolderInfo
+            .wordsModel.reversed()[safe: indexPath.row]
+        ).nonOptional(.emptyModel)
+
+        let wordForeignTitle = Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(allWordsData.foreignWord),
+            false: .value(selectedWordsData.foreignWord))
+        cell.setupView(viewModel: .init(name: wordForeignTitle))
+
         return cell
     }
 
@@ -214,10 +249,26 @@ extension WordListTableVC: UITableViewDataSource {
         commit editingStyle: UITableViewCell.EditingStyle,
         forRowAt indexPath: IndexPath
     ) {
-        let wordIndex = viewModel.selectedFolderInfo.wordsModel.count
+        let selectedFolderDeletedWordRowIndex = viewModel.selectedFolderInfo.wordsModel
+            .count
             .subtraction(1)
-            .subtraction(indexPath.section)
-        viewModel.setDeleteItemWith(index: wordIndex)
+            .subtraction(indexPath.row)
+        let allWordDeletedWordRowIndex = (viewModel.allFoldersInfo[safe: indexPath.section]?.wordsModel
+            .count
+            .subtraction(1)
+            .subtraction(indexPath.row)
+        ).nonOptional()
+        let selectedFolderWordIndexPath: IndexPath = .init(
+            row: selectedFolderDeletedWordRowIndex,
+            section: indexPath.section)
+        let allWordsWordIndexPath: IndexPath = .init(
+            row: allWordDeletedWordRowIndex,
+            section: indexPath.section)
+        
+        viewModel.setDeleteItemWith(indexPath: Ternary.get(
+            if: .value(viewModel.isAllWordsFolder),
+            true: .value(allWordsWordIndexPath),
+            false: .value(selectedFolderWordIndexPath)))
     }
 }
 

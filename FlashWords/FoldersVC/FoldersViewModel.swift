@@ -14,15 +14,6 @@ final class FoldersViewModel {
 
     init() {
         self.foldersData = StorageManager.getFoldersItemsFromLocalStorage()
-        if foldersData.count == 0 {
-            let folderViewModel = FoldersModelNonDB(
-                id: UUID().hashValue,
-                folderName: Titles.allWords,
-                wordsModel: [],
-                isSelected: true)
-            self.foldersData = [folderViewModel]
-            StorageManager.setRewritingDataInLocalStorage(lists: [folderViewModel])
-        }
     }
 
     func setUpdateData() {
