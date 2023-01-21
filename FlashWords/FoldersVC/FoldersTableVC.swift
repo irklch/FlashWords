@@ -180,10 +180,18 @@ extension FoldersTableVC: UITableViewDataSource {
             return .init(frame: .zero)
         }
         if indexPath.section == 0 {
-            cell.setupView(viewModel: .init(name: Titles.allWords))
+            let allWordCount = viewModel.foldersData.reduce(0) { partialResult, folderInfo in
+                let result = partialResult.sum(folderInfo.wordsModel.count)
+                return result
+            }
+            cell.setupView(viewModel: .init(
+                name: Titles.allWords, 
+                wordsCount: allWordCount))
         } else {
-            let folderName = (viewModel.foldersData[safe: indexPath.section.subtraction(1)]?.folderName).nonOptional()
-            cell.setupView(viewModel: .init(name: folderName))
+            let folderInfo = (viewModel.foldersData[safe: indexPath.section.subtraction(1)]).nonOptional(.emptyModel)
+            cell.setupView(viewModel: .init(
+                name: folderInfo.folderName,
+                wordsCount: folderInfo.wordsModel.count))
         }
 
         return cell
@@ -223,7 +231,7 @@ extension FoldersTableVC: UITableViewDataSource {
         guard indexPath.section != 0 else {
             return
         }
-        viewModel.setDeleteFolder(index: indexPath.section)
+        viewModel.setDeleteFolder(index: indexPath.section.subtraction(1))
     }
 }
 

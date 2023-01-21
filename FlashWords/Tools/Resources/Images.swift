@@ -16,17 +16,21 @@ enum Images {
         pointSize: 20,
         weight: .regular,
         scale: .medium)
+    private static let smallConfig: UIImage.SymbolConfiguration = .init(
+        pointSize: 18,
+        weight: .regular,
+        scale: .small)
     static let folder: UIImage? = .init(
         systemName: "folder",
-        withConfiguration: largeConfig)?
+        withConfiguration: mediumConfig)?
         .withRenderingMode(.alwaysTemplate)
     static let search: UIImage? = .init(
         systemName: "magnifyingglass",
         withConfiguration: largeConfig)?
         .withRenderingMode(.alwaysTemplate)
     static let arrow: UIImage? = .init(
-        systemName: "arrow.right.circle",
-        withConfiguration: mediumConfig)?
+        systemName: "chevron.right",
+        withConfiguration: smallConfig)?
         .withRenderingMode(.alwaysTemplate)
     static let plus: UIImage? = .init(
         systemName: "plus.circle.fill",

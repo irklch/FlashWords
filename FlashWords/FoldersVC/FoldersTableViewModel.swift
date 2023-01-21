@@ -18,6 +18,7 @@ final class FoldersTableViewModel {
 
     func setUpdateData() {
         foldersData = StorageManager.getFoldersItemsFromLocalStorage()
+        mainThreadActionState = .reloadData
     }
 
     func setSelectFolder(index: Int) {

@@ -20,11 +20,27 @@ final class FolderTableViewCell: UITableViewCell {
         return folderLabel
     }()
 
+    private lazy var folderImageView: UIImageView = {
+        let folderImageView = UIImageView()
+        folderImageView.image = Images.folder
+        folderImageView.tintColor = Asset.hexFCFCFC.color
+        return folderImageView
+    }()
+
     private lazy var arrowImageView: UIImageView = {
         let arrowImageView = UIImageView()
         arrowImageView.image = Images.arrow
-        arrowImageView.tintColor = Asset.hexFCFCFC.color
+        arrowImageView.tintColor = Asset.hexFCFCFC.color.withAlphaComponent(0.7)
         return arrowImageView
+    }()
+
+    private lazy var wordsCountLabel: UILabel = {
+        let wordsCountLabel = UILabel()
+        wordsCountLabel.font = .avenirMedium16
+        wordsCountLabel.textColor = Asset.hexFCFCFC.color.withAlphaComponent(0.7)
+        wordsCountLabel.textAlignment = .right
+        wordsCountLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        return wordsCountLabel
     }()
 
     func setupView(viewModel: FolderTableViewCellViewModel) {
@@ -34,17 +50,38 @@ final class FolderTableViewCell: UITableViewCell {
         contentView.layer.cornerRadius = 15.0
 
         folderLabel.text = viewModel.name
+        wordsCountLabel.text = viewModel.wordsCount.description
+
+        contentView.subviews.forEach { $0.removeFromSuperview() }
+        contentView.addSubview(folderImageView)
+        contentView.addSubview(arrowImageView)
+        contentView.addSubview(wordsCountLabel)
         contentView.addSubview(folderLabel)
-        folderLabel.snp.makeConstraints { make in
+
+        folderImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.leading.trailing.equalToSuperview().inset(20)
+            make.leading.equalToSuperview().offset(16)
+            make.height.equalTo(21)
+            make.width.equalTo(27)
         }
 
-        contentView.addSubview(arrowImageView)
         arrowImageView.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().inset(20)
+            make.trailing.equalToSuperview().inset(16)
+            make.centerY.equalToSuperview()
+            make.width.equalTo(13)
+        }
+
+        wordsCountLabel.snp.makeConstraints { make in
+            make.trailing.equalTo(arrowImageView.snp.leading).offset(-10)
             make.centerY.equalToSuperview()
         }
+
+        folderLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(folderImageView).offset(1)
+            make.trailing.equalTo(wordsCountLabel.snp.leading).offset(-16)
+            make.leading.equalTo(folderImageView.snp.trailing).offset(10)
+        }
+
     }
 
 }

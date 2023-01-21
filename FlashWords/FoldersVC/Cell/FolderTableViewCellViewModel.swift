@@ -9,4 +9,5 @@ import Foundation
 
 struct FolderTableViewCellViewModel {
     let name: String
+    let wordsCount: Int
 }
