@@ -18,13 +18,12 @@ final class WordListTableViewModel {
     var allFoldersInfo: [FoldersModelNonDB]
     private var inputViewModelObserver: AnyCancellable?
 
-    init(isAllWordsFolder: Bool) {
-        self.isAllWordsFolder = isAllWordsFolder
+    init() {
         self.inputTextViewModel = .init()
         self.allFoldersInfo = StorageManager.getFoldersItemsFromLocalStorage()
         if let selectedFolderInfo = allFoldersInfo.first(where: { $0.isSelected }) {
             self.selectedFolderInfo = selectedFolderInfo
-            self.isAllWordsFolder = isAllWordsFolder
+            self.isAllWordsFolder = false
         } else {
             self.selectedFolderInfo = .emptyModel
             self.isAllWordsFolder = true
@@ -60,6 +59,13 @@ final class WordListTableViewModel {
         selectedFolderInfo.wordsModel.append(model)
         StorageManager.setRewritingDataInLocalStorage(lists: allFoldersInfo)
         mainThreadActionsState = .reloadData
+    }
+
+    func setDeselectFolder() {
+        if !isAllWordsFolder {
+            selectedFolderInfo.isSelected = false
+            StorageManager.setRewritingDataInLocalStorage(lists: allFoldersInfo)
+        }
     }
 
 }

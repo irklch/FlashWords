@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftExtension
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
@@ -18,7 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let viewController = UINavigationController()
-        viewController.viewControllers = [FoldersVC(), WordListTableVC(viewModel: .init(isAllWordsFolder: true))]
+        let folders = StorageManager.getFoldersItemsFromLocalStorage()
+        let viewControllers: [UIViewController] = Ternary.get(
+            if: .value((folders.count == 0).or(folders.first(where: { $0.isSelected }) == nil)),
+            true: .value([FoldersVC()]),
+            false: .value([FoldersVC(), WordListTableVC()]))
+        viewController.viewControllers = viewControllers
         UIBarButtonItem.appearance().setTitleTextAttributes(
             [NSAttributedString.Key.font: UIFont.avenirMedium18], for: .normal)
         UIBarButtonItem.appearance().setTitleTextAttributes(

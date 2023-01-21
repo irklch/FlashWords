@@ -234,9 +234,7 @@ extension FoldersVC: UITableViewDelegate {
         if indexPath.section != 0 {
             viewModel.setSelectFolder(index: indexPath.section.subtraction(1))
         }
-        let viewModel = WordListTableViewModel(isAllWordsFolder: indexPath.section == 0)
-        let vc = WordListTableVC(viewModel: viewModel)
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(WordListTableVC(), animated: true)
     }
 
     func tableView(

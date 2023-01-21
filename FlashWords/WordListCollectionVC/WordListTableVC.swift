@@ -11,7 +11,7 @@ import Combine
 import SwiftExtension
 
 final class WordListTableVC: UIViewController {
-    private let viewModel: WordListTableViewModel
+    private let viewModel: WordListTableViewModel = .init()
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -41,15 +41,6 @@ final class WordListTableVC: UIViewController {
     private lazy var newWordInputView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
     private var mainThreadObserver: AnyCancellable?
 
-    init(viewModel: WordListTableViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Asset.hex333337.color
@@ -64,6 +55,9 @@ final class WordListTableVC: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         view.endEditing(true)
+        if isMovingFromParent {
+            viewModel.setDeselectFolder()
+        }
     }
 
     private func setupNavigationBar() {
