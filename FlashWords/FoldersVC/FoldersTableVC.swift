@@ -70,7 +70,13 @@ final class FoldersTableVC: UIViewController {
     }
 
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         viewModel.setUpdateData()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        setCloseEditingMode()
     }
 
     private func setupViews() {
@@ -125,36 +131,42 @@ final class FoldersTableVC: UIViewController {
             })
     }
 
+    private func setCloseEditingMode() {
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let self = self else { return }
+            self.addListButton.setImage(Images.plus, for: .normal)
+            self.newFolderTextField.alpha = 0
+            self.titleLabel.text = Titles.folders
+            self.titleLabel.textColor = Asset.hexFCFCFC.color
+            self.titleLabel.alpha = 1
+            self.view.layoutIfNeeded()
+        }
+        newFolderTextField.text = .empty
+        newFolderTextField.isUserInteractionEnabled = false
+        view.endEditing(true)
+        viewModel.isEditingMode = false
+    }
+
     @objc private func setAddNewList() {
-        if addListButton.currentImage == Images.plus {
-            UIView.animate(withDuration: 0.1) { [weak self] in
-                guard let self = self else { return }
-                self.addListButton.setImage(Images.checkmark, for: .normal)
-                self.titleLabel.text = Titles.newFolderName
-                self.titleLabel.textColor = Asset.hex5E5E69.color
-                self.newFolderTextField.alpha = 1
-                self.view.layoutIfNeeded()
-            }
-            newFolderTextField.isUserInteractionEnabled = true
-            newFolderTextField.becomeFirstResponder()
-        } else {
+        guard !viewModel.isEditingMode else {
             if let textFieldText = newFolderTextField.text?.textWithoutSpacePrefix(),
                textFieldText != .empty {
                 viewModel.setSaveNewFolder(name: textFieldText)
             }
-            UIView.animate(withDuration: 0.1) { [weak self] in
-                guard let self = self else { return }
-                self.addListButton.setImage(Images.plus, for: .normal)
-                self.newFolderTextField.alpha = 0
-                self.titleLabel.text = Titles.folders
-                self.titleLabel.textColor = Asset.hexFCFCFC.color
-                self.titleLabel.alpha = 1
-                self.view.layoutIfNeeded()
-            }
-            newFolderTextField.text = .empty
-            newFolderTextField.isUserInteractionEnabled = false
-            view.endEditing(true)
+            setCloseEditingMode()
+            return
         }
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let self = self else { return }
+            self.addListButton.setImage(Images.checkmark, for: .normal)
+            self.titleLabel.text = Titles.newFolderName
+            self.titleLabel.textColor = Asset.hex5E5E69.color
+            self.newFolderTextField.alpha = 1
+            self.view.layoutIfNeeded()
+        }
+        newFolderTextField.isUserInteractionEnabled = true
+        newFolderTextField.becomeFirstResponder()
+        viewModel.isEditingMode = true
     }
 
 }

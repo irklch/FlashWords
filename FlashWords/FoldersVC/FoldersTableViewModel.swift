@@ -11,6 +11,7 @@ import Combine
 final class FoldersTableViewModel {
     @Published var mainThreadActionState: MainThreadActionsState = .subscriptionAction
     var foldersData: [FoldersModelNonDB]
+    var isEditingMode: Bool = false
 
     init() {
         self.foldersData = StorageManager.getFoldersItemsFromLocalStorage()
