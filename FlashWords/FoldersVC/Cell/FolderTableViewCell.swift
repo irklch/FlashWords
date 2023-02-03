@@ -47,7 +47,6 @@ final class FolderTableViewCell: UITableViewCell {
         backgroundColor = .clear
         selectionStyle = .none
         contentView.backgroundColor = Asset.hex5E5E69.color
-        contentView.layer.cornerRadius = 15.0
 
         folderLabel.text = viewModel.name
         wordsCountLabel.text = viewModel.wordsCount.description

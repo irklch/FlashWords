@@ -29,6 +29,7 @@ internal enum Asset {
   internal static let hex7A7A7E = ColorAsset(name: "hex7A7A7E")
   internal static let hexCD626F = ColorAsset(name: "hexCD626F")
   internal static let hexD5BAFE = ColorAsset(name: "hexD5BAFE")
+  internal static let hexF09937 = ColorAsset(name: "hexF09937")
   internal static let hexF2F2F2 = ColorAsset(name: "hexF2F2F2")
   internal static let hexF3C196 = ColorAsset(name: "hexF3C196")
   internal static let hexFCFCFC = ColorAsset(name: "hexFCFCFC")

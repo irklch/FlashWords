@@ -33,7 +33,7 @@ final class FoldersTableVC: UIViewController {
     }()
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: .zero)
+        let tableView = UITableView(frame: .zero, style: .insetGrouped)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.showsVerticalScrollIndicator = false
@@ -43,6 +43,8 @@ final class FoldersTableVC: UIViewController {
         tableView.backgroundColor = .clear
         tableView.bounces = true
         tableView.separatorStyle = .none
+        tableView.layoutMargins = .init(top: 1, left: 1, bottom: 1, right: 1)
+
         return tableView
     }()
 
@@ -55,6 +57,7 @@ final class FoldersTableVC: UIViewController {
         newFolderTextField.isUserInteractionEnabled = false
         newFolderTextField.returnKeyType = .done
         newFolderTextField.enablesReturnKeyAutomatically = true
+        newFolderTextField.autocapitalizationType = .sentences
         return newFolderTextField
     }()
 
@@ -105,7 +108,7 @@ final class FoldersTableVC: UIViewController {
 
         tableView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(16)
+            make.leading.trailing.equalToSuperview().inset(15)
             make.bottom.equalToSuperview()
         }
     }
@@ -173,14 +176,17 @@ final class FoldersTableVC: UIViewController {
 
 extension FoldersTableVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return viewModel.foldersData.count.sum(1)
+        return 2
     }
 
     func tableView(
         _ tableView: UITableView,
         numberOfRowsInSection section: Int
     ) -> Int {
-        return 1
+        return Ternary.get(
+            if: .value(section == 0),
+            true: .value(1),
+            false: .value(viewModel.foldersData.count))
     }
 
     func tableView(
@@ -198,32 +204,16 @@ extension FoldersTableVC: UITableViewDataSource {
                 return result
             }
             cell.setupView(viewModel: .init(
-                name: Titles.allWords, 
+                name: Titles.allWords,
                 wordsCount: allWordCount))
         } else {
-            let folderInfo = (viewModel.foldersData[safe: indexPath.section.subtraction(1)]).nonOptional(.emptyModel)
+            let folderInfo = (viewModel.foldersData[safe: indexPath.row]).nonOptional(.emptyModel)
             cell.setupView(viewModel: .init(
                 name: folderInfo.folderName,
                 wordsCount: folderInfo.wordsModel.count))
         }
 
         return cell
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        viewForFooterInSection section: Int
-    ) -> UIView? {
-        let headerView = UIView()
-        headerView.backgroundColor = .clear
-        return headerView
-    }
-
-    func tableView(
-        _ tableView: UITableView,
-        heightForFooterInSection section: Int
-    ) -> CGFloat {
-        return 10
     }
 
     func tableView(
@@ -236,16 +226,40 @@ extension FoldersTableVC: UITableViewDataSource {
         return .delete
     }
 
-    func tableView(
-        _ tableView: UITableView,
-        commit editingStyle: UITableViewCell.EditingStyle,
-        forRowAt indexPath: IndexPath
-    ) {
-        guard indexPath.section != 0 else {
-            return
-        }
-        viewModel.setDeleteFolder(index: indexPath.section.subtraction(1))
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
+
+    func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard indexPath.section != 0 else { return nil}
+        let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { context, view, action in
+            print()
+        }
+        editAction.backgroundColor = .systemOrange
+        editAction.image = Images.pencil
+        let action: UISwipeActionsConfiguration = .init(actions: [editAction])
+        action.performsFirstActionWithFullSwipe = false
+        return action
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard indexPath.section != 0 else { return nil}
+        let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { [weak self] context, view, action in
+            self?.viewModel.setDeleteFolder(index: indexPath.section.subtraction(1))
+        }
+        editAction.image = Images.trash
+        let action: UISwipeActionsConfiguration = .init(actions: [editAction])
+        return action
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 0.0
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return .init(frame: .zero)
+    }
+
 }
 
 extension FoldersTableVC: UITableViewDelegate {

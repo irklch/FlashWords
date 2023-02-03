@@ -30,6 +30,7 @@ final class NewWordInputView: UIView {
         foreignTextView.text = Titles.newWord
         foreignTextView.delegate = self
         foreignTextView.isScrollEnabled = false
+        foreignTextView.autocapitalizationType = .sentences
         return foreignTextView
     }()
 
@@ -44,6 +45,7 @@ final class NewWordInputView: UIView {
         nativeTextView.delegate = self
         nativeTextView.isScrollEnabled = false
         nativeTextView.alpha = 0
+        nativeTextView.autocapitalizationType = .sentences
         return nativeTextView
     }()
 

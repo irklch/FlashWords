@@ -40,4 +40,12 @@ enum Images {
         systemName: "checkmark.circle.fill",
         withConfiguration: largeConfig)?
         .withRenderingMode(.alwaysTemplate)
+    static let pencil: UIImage? = .init(
+        systemName: "square.and.pencil",
+        withConfiguration: mediumConfig)?
+        .withRenderingMode(.alwaysTemplate)
+    static let trash: UIImage? = .init(
+        systemName: "trash",
+        withConfiguration: mediumConfig)?
+        .withRenderingMode(.alwaysTemplate)
 }

@@ -21,6 +21,7 @@ final class WordListTableVC: UIViewController {
             false: .value(viewModel.selectedFolderInfo.folderName)) 
         titleLabel.font = .avenirBold28
         titleLabel.textColor = Asset.hexFCFCFC.color
+        titleLabel.numberOfLines = 0
         return titleLabel
     }()
 
@@ -74,7 +75,7 @@ final class WordListTableVC: UIViewController {
 
     private func setupHeaderConstraints() {
         titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.top.equalTo(view.safeAreaLayoutGuide).offset(16)
         }
     }
