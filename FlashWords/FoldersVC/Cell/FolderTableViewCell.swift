@@ -7,18 +7,12 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class FolderTableViewCell: UITableViewCell {
     static let withReuseIdentifier: String = .init(describing: FolderTableViewCell.self)
 
-    private lazy var folderLabel: UILabel = {
-        let folderLabel = UILabel()
-        folderLabel.lineBreakMode = .byTruncatingTail
-        folderLabel.font = .avenirBold18
-        folderLabel.textColor = Asset.hexFCFCFC.color
-        folderLabel.textAlignment = .left
-        return folderLabel
-    }()
+    private var viewModel: FolderTableViewCellViewModel = .template
 
     private lazy var folderImageView: UIImageView = {
         let folderImageView = UIImageView()
@@ -43,19 +37,39 @@ final class FolderTableViewCell: UITableViewCell {
         return wordsCountLabel
     }()
 
+    private lazy var folderNameTextField: UITextField = {
+        let folderNameTextField = UITextField()
+        folderNameTextField.backgroundColor = .clear
+        folderNameTextField.font = .avenirBold18
+        folderNameTextField.textColor = Asset.hexFCFCFC.color
+        folderNameTextField.delegate = self
+        folderNameTextField.isUserInteractionEnabled = false
+        folderNameTextField.returnKeyType = .done
+        folderNameTextField.enablesReturnKeyAutomatically = true
+        folderNameTextField.autocapitalizationType = .sentences
+        return folderNameTextField
+    }()
+
+    var uiActionObserver: AnyCancellable?
+
     func setupView(viewModel: FolderTableViewCellViewModel) {
+        self.viewModel = viewModel
         backgroundColor = .clear
         selectionStyle = .none
         contentView.backgroundColor = Asset.hex5E5E69.color
 
-        folderLabel.text = viewModel.name
+        folderNameTextField.text = viewModel.name
         wordsCountLabel.text = viewModel.wordsCount.description
+        setupViews()
+        setupObserver()
+    }
 
+    private func setupViews() {
         contentView.subviews.forEach { $0.removeFromSuperview() }
         contentView.addSubview(folderImageView)
         contentView.addSubview(arrowImageView)
         contentView.addSubview(wordsCountLabel)
-        contentView.addSubview(folderLabel)
+        contentView.addSubview(folderNameTextField)
 
         folderImageView.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
@@ -75,12 +89,44 @@ final class FolderTableViewCell: UITableViewCell {
             make.centerY.equalToSuperview()
         }
 
-        folderLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(folderImageView).offset(1)
+        folderNameTextField.snp.makeConstraints { make in
+            make.top.bottom.equalToSuperview()
             make.trailing.equalTo(wordsCountLabel.snp.leading).offset(-16)
             make.leading.equalTo(folderImageView.snp.trailing).offset(10)
         }
-
     }
 
+    private func setupObserver() {
+       uiActionObserver = viewModel
+            .$uiActions
+            .debounce(for: 1.0, scheduler: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                case .subscriptionAction,
+                        .saveNewName:
+                    break
+                case .shouldChangeName:
+                    self?.folderNameTextField.isUserInteractionEnabled = true
+                    self?.folderNameTextField.becomeFirstResponder()
+                }
+            }
+    }
+
+}
+
+extension FolderTableViewCell: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        guard let text = textField.text,
+              text.textWithoutSpacePrefix() != .empty else {
+            textField.text = viewModel.name
+            endEditing(true)
+            textField.isUserInteractionEnabled = false
+            return true
+        }
+        viewModel.name = text
+        viewModel.uiActions = .saveNewName(text)
+        endEditing(true)
+        textField.isUserInteractionEnabled = false
+        return true
+    }
 }

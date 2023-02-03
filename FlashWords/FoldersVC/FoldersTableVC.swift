@@ -186,7 +186,7 @@ extension FoldersTableVC: UITableViewDataSource {
         return Ternary.get(
             if: .value(section == 0),
             true: .value(1),
-            false: .value(viewModel.foldersData.count))
+            false: .value(viewModel.cellsViewModel.count))
     }
 
     func tableView(
@@ -199,18 +199,15 @@ extension FoldersTableVC: UITableViewDataSource {
             return .init(frame: .zero)
         }
         if indexPath.section == 0 {
-            let allWordCount = viewModel.foldersData.reduce(0) { partialResult, folderInfo in
-                let result = partialResult.sum(folderInfo.wordsModel.count)
+            let allWordCount = viewModel.cellsViewModel.reduce(0) { partialResult, folderInfo in
+                let result = partialResult.sum(folderInfo.wordsCount)
                 return result
             }
             cell.setupView(viewModel: .init(
                 name: Titles.allWords,
                 wordsCount: allWordCount))
         } else {
-            let folderInfo = (viewModel.foldersData[safe: indexPath.row]).nonOptional(.emptyModel)
-            cell.setupView(viewModel: .init(
-                name: folderInfo.folderName,
-                wordsCount: folderInfo.wordsModel.count))
+            cell.setupView(viewModel: viewModel.cellsViewModel[indexPath.row])
         }
 
         return cell
@@ -232,8 +229,9 @@ extension FoldersTableVC: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard indexPath.section != 0 else { return nil}
-        let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { context, view, action in
-            print()
+        let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { [weak self] _, view, completion in
+            completion(true)
+            self?.viewModel.cellsViewModel[safe: indexPath.row]?.uiActions = .shouldChangeName
         }
         editAction.backgroundColor = .systemOrange
         editAction.image = Images.pencil
@@ -244,8 +242,9 @@ extension FoldersTableVC: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         guard indexPath.section != 0 else { return nil}
-        let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { [weak self] context, view, action in
-            self?.viewModel.setDeleteFolder(index: indexPath.section.subtraction(1))
+        let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { [weak self] _, _, _ in
+            self?.setCloseEditingMode()
+            self?.viewModel.setDeleteFolder(index: indexPath.row)
         }
         editAction.image = Images.trash
         let action: UISwipeActionsConfiguration = .init(actions: [editAction])

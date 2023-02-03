@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A90FDAA1298DCAFA00F04809 /* AnyCancellableManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A90FDAA0298DCAFA00F04809 /* AnyCancellableManager.swift */; };
 		A9281F602964A74300393585 /* FoldersModelDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F5F2964A74300393585 /* FoldersModelDB.swift */; };
 		A9281F632964A75600393585 /* FoldersModelNonDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9281F622964A75600393585 /* FoldersModelNonDB.swift */; };
 		A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */ = {isa = PBXBuildFile; fileRef = A92FE73C294E0B2E0025118C /* String+Sizes.swift */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.release.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.release.xcconfig"; sourceTree = "<group>"; };
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A90FDAA0298DCAFA00F04809 /* AnyCancellableManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCancellableManager.swift; sourceTree = "<group>"; };
 		A9281F5F2964A74300393585 /* FoldersModelDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersModelDB.swift; sourceTree = "<group>"; };
 		A9281F622964A75600393585 /* FoldersModelNonDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersModelNonDB.swift; sourceTree = "<group>"; };
 		A92FE73C294E0B2E0025118C /* String+Sizes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Sizes.swift"; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				A92FE73B294E0AA10025118C /* Resources */,
 				A92FE73E294E0B310025118C /* Extensions */,
 				A9EDB7EB2957323A001CDE86 /* DBError.swift */,
+				A90FDAA0298DCAFA00F04809 /* AnyCancellableManager.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -431,6 +434,7 @@
 				A92FE746294E82CB0025118C /* Symbols.swift in Sources */,
 				A9C944272964E5E30092B02F /* NewWordInputView.swift in Sources */,
 				A9281F602964A74300393585 /* FoldersModelDB.swift in Sources */,
+				A90FDAA1298DCAFA00F04809 /* AnyCancellableManager.swift in Sources */,
 				A9281F632964A75600393585 /* FoldersModelNonDB.swift in Sources */,
 				A92FE73D294E0B2E0025118C /* String+Sizes.swift in Sources */,
 				A9C944282964E5E30092B02F /* NewWordInputViewModel.swift in Sources */,
