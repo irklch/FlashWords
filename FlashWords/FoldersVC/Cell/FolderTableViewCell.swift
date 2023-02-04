@@ -30,10 +30,9 @@ final class FolderTableViewCell: UITableViewCell {
 
     private lazy var wordsCountLabel: UILabel = {
         let wordsCountLabel = UILabel()
-        wordsCountLabel.font = .avenirMedium16
+        wordsCountLabel.font = Self.wordsCountLabelFont
         wordsCountLabel.textColor = Asset.hexFCFCFC.color.withAlphaComponent(0.7)
         wordsCountLabel.textAlignment = .right
-        wordsCountLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         return wordsCountLabel
     }()
 
@@ -84,9 +83,13 @@ final class FolderTableViewCell: UITableViewCell {
             make.width.equalTo(13)
         }
 
+        let wordsCountLabelWidth: CGFloat = viewModel.wordsCount.description.getWidth(
+            withConstrainedHeight: 22.0,
+            font: Self.wordsCountLabelFont).ceil()
         wordsCountLabel.snp.makeConstraints { make in
             make.trailing.equalTo(arrowImageView.snp.leading).offset(-10)
             make.centerY.equalToSuperview()
+            make.width.equalTo(wordsCountLabelWidth)
         }
 
         folderNameTextField.snp.makeConstraints { make in
@@ -115,18 +118,21 @@ final class FolderTableViewCell: UITableViewCell {
 }
 
 extension FolderTableViewCell: UITextFieldDelegate {
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         guard let text = textField.text,
               text.textWithoutSpacePrefix() != .empty else {
             textField.text = viewModel.name
             endEditing(true)
             textField.isUserInteractionEnabled = false
-            return true
+            return 
         }
         viewModel.name = text
         viewModel.uiActions = .saveNewName(text)
         endEditing(true)
         textField.isUserInteractionEnabled = false
-        return true
     }
+}
+
+extension FolderTableViewCell {
+    private static let wordsCountLabelFont: UIFont = .avenirMedium16
 }

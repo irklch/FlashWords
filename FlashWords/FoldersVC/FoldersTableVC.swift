@@ -70,6 +70,7 @@ final class FoldersTableVC: UIViewController {
         setupViews()
         setupConstraints()
         setupObserver()
+        setDismissKeyboardTapGesture()
     }
 
     override func viewWillAppear(_ animated: Bool) {
