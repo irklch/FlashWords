@@ -268,7 +268,7 @@ extension FoldersTableVC: UITableViewDelegate {
     ) {
         view.endEditing(true)
         if indexPath.section != 0 {
-            viewModel.setSelectFolder(index: indexPath.section.subtraction(1))
+            viewModel.setSelectFolder(index: indexPath.row)
         }
         navigationController?.pushViewController(WordListTableVC(), animated: true)
     }
