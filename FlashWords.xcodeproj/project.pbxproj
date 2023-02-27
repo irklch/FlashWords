@@ -19,6 +19,8 @@
 		A96F74E9296732490066F668 /* StorageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A96F74E8296732490066F668 /* StorageManager.swift */; };
 		A9A7E79D297CA01B00B4B036 /* FolderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A7E79C297CA01B00B4B036 /* FolderTableViewCell.swift */; };
 		A9A7E79F297CA07200B4B036 /* FolderTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9A7E79E297CA07200B4B036 /* FolderTableViewCellViewModel.swift */; };
+		A9BBECEC298EAB7F00ED1B65 /* FlashWordsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BBECEB298EAB7F00ED1B65 /* FlashWordsUITests.swift */; };
+		A9BBECEE298EAB7F00ED1B65 /* FlashWordsUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9BBECED298EAB7F00ED1B65 /* FlashWordsUITestsLaunchTests.swift */; };
 		A9C152F8294A6BC6004A0662 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A9C152F7294A6BC6004A0662 /* Colors.xcassets */; };
 		A9C152FB294A6FB3004A0662 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FA294A6FB3004A0662 /* Colors.swift */; };
 		A9C152FD294A7613004A0662 /* Titles.swift in Sources */ = {isa = PBXBuildFile; fileRef = A9C152FC294A7613004A0662 /* Titles.swift */; };
@@ -44,6 +46,16 @@
 		D57C574DEDE1017976FF0E6F /* Pods_FlashWords.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A9BBECEF298EAB7F00ED1B65 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A9F9DC9C294A623100055BEF /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A9F9DCA3294A623100055BEF;
+			remoteInfo = FlashWords;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		A342CBD72CD7C4C5D6EE7A30 /* Pods-FlashWords.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FlashWords.release.xcconfig"; path = "Target Support Files/Pods-FlashWords/Pods-FlashWords.release.xcconfig"; sourceTree = "<group>"; };
 		A4F5D31A2065704322441BBA /* Pods_FlashWords.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FlashWords.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +71,9 @@
 		A96F74E8296732490066F668 /* StorageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageManager.swift; sourceTree = "<group>"; };
 		A9A7E79C297CA01B00B4B036 /* FolderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTableViewCell.swift; sourceTree = "<group>"; };
 		A9A7E79E297CA07200B4B036 /* FolderTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		A9BBECE9298EAB7F00ED1B65 /* FlashWordsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FlashWordsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A9BBECEB298EAB7F00ED1B65 /* FlashWordsUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashWordsUITests.swift; sourceTree = "<group>"; };
+		A9BBECED298EAB7F00ED1B65 /* FlashWordsUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashWordsUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A9C152F7294A6BC6004A0662 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
 		A9C152FA294A6FB3004A0662 /* Colors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		A9C152FC294A7613004A0662 /* Titles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Titles.swift; sourceTree = "<group>"; };
@@ -85,6 +100,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		A9BBECE6298EAB7E00ED1B65 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9F9DCA1294A623100055BEF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -180,6 +202,15 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		A9BBECEA298EAB7F00ED1B65 /* FlashWordsUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A9BBECEB298EAB7F00ED1B65 /* FlashWordsUITests.swift */,
+				A9BBECED298EAB7F00ED1B65 /* FlashWordsUITestsLaunchTests.swift */,
+			);
+			path = FlashWordsUITests;
+			sourceTree = "<group>";
+		};
 		A9C152F9294A6F63004A0662 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -243,6 +274,7 @@
 			isa = PBXGroup;
 			children = (
 				A9F9DCA6294A623100055BEF /* FlashWords */,
+				A9BBECEA298EAB7F00ED1B65 /* FlashWordsUITests */,
 				A9F9DCA5294A623100055BEF /* Products */,
 				71B7C62BFBB80EB9F0FDD2B6 /* Pods */,
 				9C4E96C2F571ED3CE5940603 /* Frameworks */,
@@ -253,6 +285,7 @@
 			isa = PBXGroup;
 			children = (
 				A9F9DCA4294A623100055BEF /* FlashWords.app */,
+				A9BBECE9298EAB7F00ED1B65 /* FlashWordsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -296,6 +329,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		A9BBECE8298EAB7E00ED1B65 /* FlashWordsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A9BBECF3298EAB7F00ED1B65 /* Build configuration list for PBXNativeTarget "FlashWordsUITests" */;
+			buildPhases = (
+				A9BBECE5298EAB7E00ED1B65 /* Sources */,
+				A9BBECE6298EAB7E00ED1B65 /* Frameworks */,
+				A9BBECE7298EAB7E00ED1B65 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A9BBECF0298EAB7F00ED1B65 /* PBXTargetDependency */,
+			);
+			name = FlashWordsUITests;
+			productName = FlashWordsUITests;
+			productReference = A9BBECE9298EAB7F00ED1B65 /* FlashWordsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		A9F9DCA3294A623100055BEF /* FlashWords */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = A9F9DCB8294A623300055BEF /* Build configuration list for PBXNativeTarget "FlashWords" */;
@@ -326,9 +377,13 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1400;
+				LastSwiftUpdateCheck = 1420;
 				LastUpgradeCheck = 1400;
 				TargetAttributes = {
+					A9BBECE8298EAB7E00ED1B65 = {
+						CreatedOnToolsVersion = 14.2;
+						TestTargetID = A9F9DCA3294A623100055BEF;
+					};
 					A9F9DCA3294A623100055BEF = {
 						CreatedOnToolsVersion = 14.0.1;
 					};
@@ -352,11 +407,19 @@
 			projectRoot = "";
 			targets = (
 				A9F9DCA3294A623100055BEF /* FlashWords */,
+				A9BBECE8298EAB7E00ED1B65 /* FlashWordsUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		A9BBECE7298EAB7E00ED1B65 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9F9DCA2294A623100055BEF /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -415,6 +478,15 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		A9BBECE5298EAB7E00ED1B65 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A9BBECEC298EAB7F00ED1B65 /* FlashWordsUITests.swift in Sources */,
+				A9BBECEE298EAB7F00ED1B65 /* FlashWordsUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A9F9DCA0294A623100055BEF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -450,6 +522,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		A9BBECF0298EAB7F00ED1B65 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A9F9DCA3294A623100055BEF /* FlashWords */;
+			targetProxy = A9BBECEF298EAB7F00ED1B65 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		A9F9DCB2294A623300055BEF /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -462,6 +542,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		A9BBECF1298EAB7F00ED1B65 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CY87MBJTCB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = irklch.FlashWordsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FlashWords;
+			};
+			name = Debug;
+		};
+		A9BBECF2298EAB7F00ED1B65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CY87MBJTCB;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = irklch.FlashWordsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FlashWords;
+			};
+			name = Release;
+		};
 		A9F9DCB6294A623300055BEF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -643,6 +759,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		A9BBECF3298EAB7F00ED1B65 /* Build configuration list for PBXNativeTarget "FlashWordsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A9BBECF1298EAB7F00ED1B65 /* Debug */,
+				A9BBECF2298EAB7F00ED1B65 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		A9F9DC9F294A623100055BEF /* Build configuration list for PBXProject "FlashWords" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
