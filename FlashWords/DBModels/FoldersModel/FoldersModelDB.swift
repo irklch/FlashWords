@@ -14,6 +14,10 @@ final class FoldersModelDB: Object {
     private var wordsModel = List<WordsModelDB>()
     @objc dynamic private var isSelected: Bool = false
 
+    override public static func primaryKey() -> String? {
+        return "id"
+    }
+
     func getNonDBModel() throws -> FoldersModelNonDB {
         guard isInvalidated == false else {
             throw DBError.objectInvalid

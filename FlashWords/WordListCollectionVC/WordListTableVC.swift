@@ -55,6 +55,11 @@ final class WordListTableVC: UIViewController {
         setKeyboardNotifications()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.setUpdateData()
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         view.endEditing(true)
@@ -224,9 +229,28 @@ extension WordListTableVC: UITableViewDataSource {
 
     func tableView(
         _ tableView: UITableView,
-        editingStyleForRowAt indexPath: IndexPath
-    ) -> UITableViewCell.EditingStyle {
-        return .delete
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        let selectedFolderDeletedWordRowIndex = viewModel.selectedFolderInfo.wordsModel
+            .count
+            .subtraction(1)
+            .subtraction(indexPath.row)
+        guard let wordModel = viewModel.selectedFolderInfo.wordsModel[safe: selectedFolderDeletedWordRowIndex] else { return nil }
+        let viewModel: FoldersTableViewModel = .init(
+            title: Titles.chooseFolder,
+            isMovingMode: true,
+            movingFromFolderId: viewModel.selectedFolderInfo.id,
+            movingWordId: wordModel.id)
+        let vc = FoldersTableVC(viewModel: viewModel)
+        let editAction: UIContextualAction = .init(style: .normal, title: .empty) { [weak self] _, _, _ in
+            self?.navigationController?.pushViewController(
+                vc, 
+                animated: true)
+        }
+        editAction.backgroundColor = .blue
+        editAction.image = Images.folder
+        let action: UISwipeActionsConfiguration = .init(actions: [editAction])
+        return action
     }
 
     func tableView(

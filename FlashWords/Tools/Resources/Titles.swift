@@ -16,4 +16,5 @@ enum Titles {
     static let folders: String = "Folders"
     static let addNewFolder: String = "Add new folder"
     static let newFolderName: String = "New folder name"
+    static let chooseFolder: String = "Choose a folder"
 }

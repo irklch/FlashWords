@@ -7,16 +7,30 @@
 
 import Foundation
 import Combine
+import SwiftExtension
 
 final class FoldersTableViewModel {
     @Published var mainThreadActionState: MainThreadActionsState = .subscriptionAction
     var cellsViewModel: [FolderTableViewCellViewModel]
     var isEditingMode: Bool = false
+    let isMovingMode: Bool
+    let title: String
+    let movingFromFolderId: Int?
+    let movingWordId: Int?
 
     private var foldersData: [FoldersModelNonDB]
     private let observersManager = AnyCancellableManager<Observers>()
 
-    init() {
+    init(
+        title: String,
+        isMovingMode: Bool,
+        movingFromFolderId: Int? = nil,
+        movingWordId: Int? = nil
+    ) {
+        self.title = title
+        self.isMovingMode = isMovingMode
+        self.movingFromFolderId = movingFromFolderId
+        self.movingWordId = movingWordId
         self.foldersData = StorageManager.getFoldersItemsFromLocalStorage()
         self.cellsViewModel = foldersData.map({ FolderTableViewCellViewModel(
             name: $0.folderName,
@@ -49,9 +63,10 @@ final class FoldersTableViewModel {
     }
 
     private func setUpdateCellsData() {
-        cellsViewModel = foldersData.map({ FolderTableViewCellViewModel(
-            name: $0.folderName,
-            wordsCount: $0.wordsModel.count)
+        cellsViewModel = foldersData.map({
+            FolderTableViewCellViewModel(
+                name: $0.folderName,
+                wordsCount: $0.wordsModel.count)
         })
         setupCellsObservers()
         mainThreadActionState = .reloadData
@@ -85,12 +100,25 @@ final class FoldersTableViewModel {
         StorageManager.setRewritingDataInLocalStorage(lists: foldersData)
         setUpdateCellsData()
     }
+
+    func setMoveWordTo(index: Int) {
+        guard let movingWordId,
+              let movingFromFolderId,
+              let folderModel = foldersData.first(where: { $0.id == movingFromFolderId }),
+              let wordModel = folderModel.wordsModel.first(where: { $0.id == movingWordId }),
+              let selectedFolder = foldersData[safe: index] else { return }
+        folderModel.wordsModel.removeAll { $0.id == movingWordId }
+        selectedFolder.wordsModel.append(wordModel)
+        StorageManager.setRewritingDataInLocalStorage(lists: foldersData)
+        mainThreadActionState = .popToRoot
+    }
 }
 
 extension FoldersTableViewModel {
     enum MainThreadActionsState {
         case subscriptionAction
         case reloadData
+        case popToRoot
     }
 }
 

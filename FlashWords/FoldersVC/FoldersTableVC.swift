@@ -11,25 +11,25 @@ import Combine
 import SwiftExtension
 
 final class FoldersTableVC: UIViewController {
-    private let viewModel: FoldersTableViewModel = .init()
+    private let viewModel: FoldersTableViewModel
 
     private lazy var titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = Titles.folders
+        titleLabel.text = viewModel.title
         titleLabel.font = .avenirBold28
         titleLabel.textColor = Asset.hexFCFCFC.color
         return titleLabel
     }()
 
-    private lazy var addListButton: UIButton = {
-        let addListButton = UIButton()
-        addListButton.setImage(Images.plus, for: .normal)
-        addListButton.tintColor = Asset.hexFCFCFC.color
-        addListButton.addTarget(
+    private lazy var addFolderButton: UIButton = {
+        let addFolderButton = UIButton()
+        addFolderButton.setImage(Images.plus, for: .normal)
+        addFolderButton.tintColor = Asset.hexFCFCFC.color
+        addFolderButton.addTarget(
             self,
-            action: #selector(setAddNewList),
+            action: #selector(setAddNewFolder),
             for: .touchUpInside)
-        return addListButton
+        return addFolderButton
     }()
 
     private lazy var tableView: UITableView = {
@@ -63,6 +63,15 @@ final class FoldersTableVC: UIViewController {
 
     private var actionObserver: AnyCancellable?
 
+    init(viewModel: FoldersTableViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = Asset.hex333337.color
@@ -85,7 +94,7 @@ final class FoldersTableVC: UIViewController {
 
     private func setupViews() {
         view.addSubview(titleLabel)
-        view.addSubview(addListButton)
+        view.addSubview(addFolderButton)
         view.addSubview(tableView)
         view.addSubview(newFolderTextField)
     }
@@ -101,7 +110,7 @@ final class FoldersTableVC: UIViewController {
             make.leading.top.height.equalTo(titleLabel)
         }
 
-        addListButton.snp.makeConstraints { make in
+        addFolderButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(16)
             make.centerY.equalTo(titleLabel.snp.centerY)
             make.height.width.equalTo(30)
@@ -131,6 +140,8 @@ final class FoldersTableVC: UIViewController {
                         animations: { [weak self] in
                             self?.tableView.reloadData()
                         }, completion: nil)
+                case .popToRoot:
+                    self.navigationController?.popViewController(animated: true)
                 }
             })
     }
@@ -138,7 +149,7 @@ final class FoldersTableVC: UIViewController {
     private func setCloseEditingMode() {
         UIView.animate(withDuration: 0.1) { [weak self] in
             guard let self = self else { return }
-            self.addListButton.setImage(Images.plus, for: .normal)
+            self.addFolderButton.setImage(Images.plus, for: .normal)
             self.newFolderTextField.alpha = 0
             self.titleLabel.text = Titles.folders
             self.titleLabel.textColor = Asset.hexFCFCFC.color
@@ -151,7 +162,7 @@ final class FoldersTableVC: UIViewController {
         viewModel.isEditingMode = false
     }
 
-    @objc private func setAddNewList() {
+    @objc private func setAddNewFolder() {
         guard !viewModel.isEditingMode else {
             if let textFieldText = newFolderTextField.text?.textWithoutSpacePrefix(),
                textFieldText != .empty {
@@ -162,7 +173,7 @@ final class FoldersTableVC: UIViewController {
         }
         UIView.animate(withDuration: 0.1) { [weak self] in
             guard let self = self else { return }
-            self.addListButton.setImage(Images.checkmark, for: .normal)
+            self.addFolderButton.setImage(Images.checkmark, for: .normal)
             self.titleLabel.text = Titles.newFolderName
             self.titleLabel.textColor = Asset.hex5E5E69.color
             self.newFolderTextField.alpha = 1
@@ -177,7 +188,10 @@ final class FoldersTableVC: UIViewController {
 
 extension FoldersTableVC: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return Ternary.get(
+            if: .value(viewModel.isMovingMode),
+            true: .value(1),
+            false: .value(2))
     }
 
     func tableView(
@@ -185,7 +199,7 @@ extension FoldersTableVC: UITableViewDataSource {
         numberOfRowsInSection section: Int
     ) -> Int {
         return Ternary.get(
-            if: .value(section == 0),
+            if: .value((section == 0).and(!viewModel.isMovingMode)),
             true: .value(1),
             false: .value(viewModel.cellsViewModel.count))
     }
@@ -199,7 +213,7 @@ extension FoldersTableVC: UITableViewDataSource {
             for: indexPath) as? FolderTableViewCell else {
             return .init(frame: .zero)
         }
-        if indexPath.section == 0 {
+        if (indexPath.section == 0).and(!viewModel.isMovingMode) {
             let allWordCount = viewModel.cellsViewModel.reduce(0) { partialResult, folderInfo in
                 let result = partialResult.sum(folderInfo.wordsCount)
                 return result
@@ -229,7 +243,7 @@ extension FoldersTableVC: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard indexPath.section != 0 else { return nil}
+        guard (indexPath.section != 0).and(!viewModel.isMovingMode) else { return nil}
         let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { [weak self] _, view, completion in
             completion(true)
             self?.viewModel.cellsViewModel[safe: indexPath.row]?.uiActions = .shouldChangeName
@@ -242,7 +256,7 @@ extension FoldersTableVC: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        guard indexPath.section != 0 else { return nil}
+        guard (indexPath.section != 0).and(!viewModel.isMovingMode) else { return nil}
         let editAction: UIContextualAction = .init(style: .destructive, title: .empty) { [weak self] _, _, _ in
             self?.setCloseEditingMode()
             self?.viewModel.setDeleteFolder(index: indexPath.row)
@@ -268,6 +282,10 @@ extension FoldersTableVC: UITableViewDelegate {
         didSelectRowAt indexPath: IndexPath
     ) {
         view.endEditing(true)
+        guard !viewModel.isMovingMode else {
+            viewModel.setMoveWordTo(index: indexPath.row)
+            return
+        }
         if indexPath.section != 0 {
             viewModel.setSelectFolder(index: indexPath.row)
         }
@@ -303,7 +321,7 @@ extension FoldersTableVC: UITextFieldDelegate {
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        setAddNewList()
+        setAddNewFolder()
         view.endEditing(true)
         return true
     }

@@ -68,6 +68,18 @@ final class WordListTableViewModel {
         }
     }
 
+    func setUpdateData() {
+        self.allFoldersInfo = StorageManager.getFoldersItemsFromLocalStorage()
+        if let selectedFolderInfo = allFoldersInfo.first(where: { $0.isSelected }) {
+            self.selectedFolderInfo = selectedFolderInfo
+            self.isAllWordsFolder = false
+        } else {
+            self.selectedFolderInfo = .emptyModel
+            self.isAllWordsFolder = true
+        }
+        mainThreadActionsState = .reloadData
+    }
+
 }
 
 extension WordListTableViewModel {

@@ -184,6 +184,7 @@ final class NewWordInputView: UIView {
         }
 
         let wordModel: WordsModelNonDB = .init(
+            id: foreignText.hashValue,
             foreignWord: foreignText,
             nativeWord: nativeText)
         viewModel.backgroundThreadActionsState = .addedWord(wordModel)
@@ -255,8 +256,6 @@ final class NewWordInputView: UIView {
 }
 
 extension NewWordInputView: UITextViewDelegate {
-    #warning("добавить расчёт высоты")
-
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         if textView.textColor == Asset.hex7A7A7E.color {
             textView.textColor = Asset.hexF2F2F2.color

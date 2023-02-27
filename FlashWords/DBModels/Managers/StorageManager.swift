@@ -26,8 +26,10 @@ enum StorageManager {
         do {
             let realm = try Realm()
             let oldObject = realm.objects(FoldersModelDB.self)
+            let oldWordObject = realm.objects(WordsModelDB.self)
             realm.beginWrite()
             realm.delete(oldObject)
+            realm.delete(oldWordObject)
             realm.add(dataModels)
             try realm.commitWrite()
         } catch {

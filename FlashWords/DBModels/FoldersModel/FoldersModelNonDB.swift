@@ -21,7 +21,8 @@ final class FoldersModelNonDB {
     var isSelected: Bool
 
     init(
-        id: Int, folderName: String,
+        id: Int,
+        folderName: String,
         wordsModel: [WordsModelNonDB],
         isSelected: Bool
     ) {
