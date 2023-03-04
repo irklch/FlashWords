@@ -67,7 +67,6 @@ final class NewWordInputView: UIView {
     private lazy var separatorLineLayer: CALayer = {
         let separatorLineLayer = CALayer()
         separatorLineLayer.backgroundColor = Asset.hex424247.color.cgColor
-        separatorLineLayer.isHidden = true
         return separatorLineLayer
     }()
 
@@ -89,8 +88,7 @@ final class NewWordInputView: UIView {
         super.init(frame: .zero)
         setupView()
         setupViewsConstraints()
-        setupSeparatorLineLayer()
-        setupObserver()
+        setKeyboardNotifications()
     }
 
     @available(*, unavailable)
@@ -112,65 +110,49 @@ final class NewWordInputView: UIView {
     }
 
     private func setupViewsConstraints() {
-
         inputBackgroundView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-                .inset(NewWordInputViewOffsets.inputBackgroundViewTopOffset)
+                .inset(ClosedOffsets.backgroundViewTopOffset)
             make.leading.equalToSuperview()
-                .inset(NewWordInputViewOffsets.inputViewLeadingOffset)
-            make.trailing.equalToSuperview().offset(-NewWordInputViewOffsets.inputViewTrailingOffset)
-            make.height.equalTo(NewWordInputViewOffsets.inputBackgroundViewClosedHeight)
+                .inset(ClosedOffsets.backgroundViewLeadingOffset)
+            make.trailing.equalToSuperview()
+                .offset(-ClosedOffsets.backgroundViewTrailingOffset)
+            make.height.equalTo(ClosedOffsets.backgroundViewHeight)
         }
 
         foreignTextView.snp.makeConstraints { make in
             make.top.equalToSuperview()
-                .offset(NewWordInputViewOffsets.textViewTopOffset)
-            make.leading.trailing.equalToSuperview()
-                .inset(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
-            make.height.equalTo(NewWordInputViewOffsets.textViewClosedHeight)
+                .offset(ClosedOffsets.textViewTopOffset)
+            make.leading.equalToSuperview()
+                .inset(ClosedOffsets.textViewLeadingOffset)
+            make.trailing.equalToSuperview()
+                .inset(-ClosedOffsets.textViewTrailingOffset)
+            make.height.equalTo(ClosedOffsets.textViewHeight)
         }
 
-        let nativeTextViewTopOffset = NewWordInputViewOffsets.textViewBottomOffset
-            .sum(NewWordInputViewOffsets.separatorLineHeight)
-            .sum(NewWordInputViewOffsets.textViewBottomOffset)
         nativeTextView.snp.makeConstraints { make in
-            make.top.equalTo(foreignTextView.snp.bottom).offset(nativeTextViewTopOffset)
-            make.leading.trailing.equalToSuperview()
-                .inset(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
-            make.height.equalTo(NewWordInputViewOffsets.textViewOpenedHeight)
+            make.top.equalTo(foreignTextView.snp.bottom)
+            make.leading.equalToSuperview()
+                .inset(ClosedOffsets.textViewLeadingOffset)
+            make.trailing.equalToSuperview()
+                .inset(-ClosedOffsets.textViewTrailingOffset)
+            make.height.equalTo(ClosedOffsets.textViewHeight)
         }
 
         addWordButton.snp.makeConstraints { make in
             make.top.equalTo(inputBackgroundView.snp.bottom)
-                .offset(NewWordInputViewOffsets.addWordButtonTopOffset)
+                .offset(ShortOpenedOffsets.addWordButtonTopOffset)
             make.trailing.equalToSuperview().inset(16)
-            make.height.equalTo(NewWordInputViewOffsets.addWordButtonHeight)
+            make.height.equalTo(ShortOpenedOffsets.addWordButtonHeight)
             make.width.equalTo(65)
         }
 
         fullInputButton.snp.makeConstraints { make in
             make.centerY.equalTo(inputBackgroundView)
             make.trailing.equalToSuperview()
-                .offset(-NewWordInputViewOffsets.fullInputButtonClosedTrailingOffset)
-            make.height.width.equalTo(NewWordInputViewOffsets.fullInputButtonSize)
+                .offset(-ClosedOffsets.fullInputButtonTrailingOffset)
+            make.height.width.equalTo(ClosedOffsets.fullInputButtonSize)
         }
-    }
-
-    private func setupSeparatorLineLayer() {
-        let layerWidth: CGFloat = UIScreen.main.bounds.width
-            .subtraction(NewWordInputViewOffsets.inputViewLeadingOffset)
-            .subtraction(NewWordInputViewOffsets.inputViewLeadingOffset)
-            .subtraction(NewWordInputViewOffsets.textFieldOpenTrailingOffset)
-            .subtraction(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
-        let layerY: CGFloat = NewWordInputViewOffsets.textViewTopOffset
-            .sum(NewWordInputViewOffsets.textViewOpenedHeight)
-            .sum(NewWordInputViewOffsets.textViewBottomOffset)
-        inputBackgroundView.layer.addSublayer(separatorLineLayer)
-        separatorLineLayer.frame = .init(
-            x: NewWordInputViewOffsets.textViewLeadingTrailingOffset,
-            y: layerY,
-            width: layerWidth,
-            height: NewWordInputViewOffsets.separatorLineHeight)
     }
 
     @objc private func setAddWordInVocabulary() {
@@ -184,17 +166,17 @@ final class NewWordInputView: UIView {
             .or(foreignTextView.textColor == Asset.hex7A7A7E.color)
             .or(nativeTextView.textColor == Asset.hex7A7A7E.color)
         {
-            UIView.animate(withDuration: 0.3) { [weak self] in
+            UIView.animate(withDuration: 0.1) { [weak self] in
                 self?.addWordButton.setTitle(Titles.youNeedToWriteWords, for: .normal)
                 self?.addWordButton.setTitleColor(Asset.hexCD626F.color, for: .normal)
                 self?.addWordButton.snp.updateConstraints({ make in
-                    make.width.equalTo(NewWordInputViewOffsets.addButtonErrorWidth)
+                    make.width.equalTo(ShortOpenedOffsets.addWordButtonErrorWidth)
                 })
                 self?.layoutIfNeeded()
             } completion: { [weak self] _ in
-                UIView.animate(withDuration: 0.3, delay: 2) { [weak self] in
+                UIView.animate(withDuration: 0.1, delay: 2) { [weak self] in
                     self?.addWordButton.snp.updateConstraints({ make in
-                        make.width.equalTo(NewWordInputViewOffsets.addButtonOriginalWidth)
+                        make.width.equalTo(ShortOpenedOffsets.addWordButtonOriginalWidth)
                     })
                     self?.layoutIfNeeded()
                 } completion: { [weak self] _ in
@@ -216,84 +198,6 @@ final class NewWordInputView: UIView {
         endEditing(true)
     }
 
-    private func setupObserver() {
-        actionsObserver = viewModel
-            .$mainThreadActionsState
-            .receive(on: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] state in
-                switch state {
-                case .subscriptionAction:
-                    break
-                case .viewSelected:
-                    self?.setOpenTextViews()
-                case .viewDeselected:
-                    self?.setCloseTextViews()
-                }
-            })
-    }
-
-    private func setOpenTextViews() {
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else { return }
-            self.inputBackgroundView.snp.updateConstraints { make in
-                make.height.equalTo(NewWordInputViewOffsets.inputBackgroundViewOpenedHeight)
-                make.trailing.equalToSuperview()
-                    .offset(-NewWordInputViewOffsets.inputViewLeadingOffset)
-            }
-
-            self.foreignTextView.snp.updateConstraints { make in
-                make.height.equalTo(NewWordInputViewOffsets.textViewOpenedHeight)
-                make.trailing.equalToSuperview()
-                    .offset(-NewWordInputViewOffsets.textFieldOpenTrailingOffset)
-            }
-
-            self.nativeTextView.snp.makeConstraints { make in
-                make.trailing.equalToSuperview()
-                    .offset(-NewWordInputViewOffsets.textFieldOpenTrailingOffset)
-            }
-
-            self.fullInputButton.snp.updateConstraints { make in
-                make.trailing.equalToSuperview()
-                    .offset(-NewWordInputViewOffsets.fullInputButtonOpenedTrailingOffset)
-            }
-
-            self.nativeTextView.alpha = 1
-            self.addWordButton.alpha = 1
-            self.separatorLineLayer.isHidden = false
-            self.layoutIfNeeded()
-        }
-    }
-
-    private func setCloseTextViews() {
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else { return }
-            self.inputBackgroundView.snp.updateConstraints { make in
-                make.height.equalTo(NewWordInputViewOffsets.inputBackgroundViewClosedHeight)
-                make.trailing.equalToSuperview().offset(-NewWordInputViewOffsets.inputViewTrailingOffset)
-            }
-
-            self.foreignTextView.snp.updateConstraints { make in
-                make.height.equalTo(NewWordInputViewOffsets.textViewClosedHeight)
-                make.trailing.equalToSuperview()
-                    .inset(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
-            }
-
-            self.nativeTextView.snp.updateConstraints { make in
-                make.trailing.equalToSuperview()
-                    .inset(NewWordInputViewOffsets.textViewLeadingTrailingOffset)
-            }
-
-            self.fullInputButton.snp.updateConstraints { make in
-                make.trailing.equalToSuperview().offset(-NewWordInputViewOffsets.inputViewLeadingOffset)
-            }
-
-            self.nativeTextView.alpha = 0
-            self.addWordButton.alpha = 0
-            self.separatorLineLayer.isHidden = true
-            self.layoutIfNeeded()
-        }
-    }
-
     private func setTextViewStartState(_ textView: UITextView) {
         textView.textColor = Asset.hex7A7A7E.color
         textView.text = Ternary.get(
@@ -304,7 +208,237 @@ final class NewWordInputView: UIView {
     }
 
     @objc func setOpenFullInputScreen() {
+        if viewModel.viewState == .closed {
+            foreignTextView.becomeFirstResponder()
+            viewModel.viewState = .fullOpened
+        } else {
+            viewModel.viewState = .fullOpened
+            let height = UIScreen.mainHeight.subtraction(viewModel.keyboardHeight)
+            viewModel.mainThreadActionsState = .hideNavigationBar
+            viewModel.mainThreadActionsState = .updateHeight(
+                keyboardHeight: viewModel.keyboardHeight,
+                viewHeight: height)
+            setFullOpenedViewState()
+        }
+    }
 
+    private func setKeyboardNotifications() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(setKeyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(setKeyboardWillHide),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+    }
+
+    @objc private func setKeyboardWillShow(_ notification: Notification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
+        viewModel.keyboardHeight = keyboardSize.height
+        switch viewModel.viewState {
+        case .closed:
+            viewModel.viewState = .shortOpened
+            viewModel.mainThreadActionsState = .updateHeight(
+                keyboardHeight: keyboardSize.height,
+                viewHeight: ShortOpenedOffsets.viewHeight)
+            setShortOpenedViewState()
+        case .shortOpened:
+            break
+        case .fullOpened:
+            viewModel.viewState = .fullOpened
+            let height = UIScreen.mainHeight.subtraction(keyboardSize.height)
+            viewModel.mainThreadActionsState = .hideNavigationBar
+            viewModel.mainThreadActionsState = .updateHeight(
+                keyboardHeight: keyboardSize.height,
+                viewHeight: height)
+            setFullOpenedViewState()
+        }
+    }
+
+    private func setFullOpenedViewState() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            guard let self = self else { return }
+            self.backgroundColor = Asset.hex333337.color
+
+            self.inputBackgroundView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                    .offset(FullOpenedOffsets.backgroundViewTopOffset)
+                make.leading.trailing.equalToSuperview()
+                make.height.equalTo(FullOpenedOffsets.backgroundViewHeight)
+            }
+
+            self.foreignTextView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                make.leading.equalToSuperview()
+                    .inset(FullOpenedOffsets.textViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .inset(-FullOpenedOffsets.textViewTrailingOffset)
+                make.height.equalTo(FullOpenedOffsets.textViewHeight)
+            }
+
+            let nativeTextViewTopOffset = FullOpenedOffsets.textViewBottomOffset
+                .sum(FullOpenedOffsets.separatorLineHeight)
+                .sum(FullOpenedOffsets.textViewBottomOffset)
+
+            self.nativeTextView.snp.remakeConstraints { make in
+                make.top.equalTo(self.foreignTextView.snp.bottom)
+                    .offset(nativeTextViewTopOffset)
+                make.leading.equalToSuperview()
+                    .inset(FullOpenedOffsets.textViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .inset(-FullOpenedOffsets.textViewTrailingOffset)
+                make.height.equalTo(FullOpenedOffsets.textViewHeight)
+            }
+
+            self.addWordButton.alpha = 0
+            self.fullInputButton.alpha = 0
+            self.nativeTextView.alpha = 1
+            self.setupSeparatorLineLayerForFullOpenedView()
+            self.layoutIfNeeded()
+        }
+    }
+
+    private func setupSeparatorLineLayerForFullOpenedView() {
+        separatorLineLayer.removeFromSuperlayer()
+        separatorLineLayer.isHidden = false
+        let layerWidth: CGFloat = UIScreen.mainWidth
+            .subtraction(FullOpenedOffsets.textViewLeadingOffset)
+            .subtraction(FullOpenedOffsets.textViewTrailingOffset)
+        let layerY: CGFloat = FullOpenedOffsets.textViewHeight
+            .sum(FullOpenedOffsets.textViewBottomOffset)
+        inputBackgroundView.layer.addSublayer(separatorLineLayer)
+        separatorLineLayer.frame = .init(
+            x: FullOpenedOffsets.textViewLeadingOffset,
+            y: layerY,
+            width: layerWidth,
+            height: FullOpenedOffsets.separatorLineHeight)
+    }
+
+    private func setShortOpenedViewState() {
+        backgroundColor = Asset.hex424247.color
+//        UIView.animate(withDuration: 0.1) { [weak self] in
+//            guard let self = self else { return }
+            self.backgroundColor = Asset.hex424247.color
+
+            self.inputBackgroundView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                    .inset(ShortOpenedOffsets.backgroundViewTopOffset)
+                make.leading.equalToSuperview()
+                    .inset(ShortOpenedOffsets.backgroundViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .offset(-ShortOpenedOffsets.backgroundViewTrailingOffset)
+                make.height.equalTo(ShortOpenedOffsets.backgroundViewHeight)
+            }
+
+            self.foreignTextView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                    .offset(ShortOpenedOffsets.textViewTopOffset)
+                make.leading.equalToSuperview()
+                    .inset(ShortOpenedOffsets.textViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .inset(-ShortOpenedOffsets.textViewTrailingOffset)
+                make.height.equalTo(ShortOpenedOffsets.textViewHeight)
+            }
+
+            let nativeTextViewTopOffset = ShortOpenedOffsets.textViewBottomOffset
+                .sum(ShortOpenedOffsets.separatorLineHeight)
+                .sum(ShortOpenedOffsets.textViewBottomOffset)
+
+            self.nativeTextView.snp.remakeConstraints { make in
+                make.top.equalTo(self.foreignTextView.snp.bottom)
+                    .offset(nativeTextViewTopOffset)
+                make.leading.equalToSuperview()
+                    .inset(ShortOpenedOffsets.textViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .inset(-ShortOpenedOffsets.textViewTrailingOffset)
+                make.height.equalTo(ShortOpenedOffsets.textViewHeight)
+            }
+
+            self.fullInputButton.snp.remakeConstraints { make in
+                make.centerY.equalTo(self.inputBackgroundView)
+                make.trailing.equalToSuperview()
+                    .offset(-ShortOpenedOffsets.fullInputButtonTrailingOffset)
+                make.height.width.equalTo(ClosedOffsets.fullInputButtonSize)
+            }
+
+            self.fullInputButton.alpha = 1
+            self.nativeTextView.alpha = 1
+            self.addWordButton.alpha = 1
+            self.setupSeparatorLineLayerForShortOpenedView()
+//            self.layoutIfNeeded()
+//        }
+    }
+
+    private func setupSeparatorLineLayerForShortOpenedView() {
+        separatorLineLayer.isHidden = false
+        separatorLineLayer.removeFromSuperlayer()
+        let layerWidth: CGFloat = UIScreen.mainWidth
+            .subtraction(ShortOpenedOffsets.backgroundViewLeadingOffset)
+            .subtraction(ShortOpenedOffsets.backgroundViewTrailingOffset)
+            .subtraction(ShortOpenedOffsets.textViewLeadingOffset)
+            .subtraction(ShortOpenedOffsets.textViewTrailingOffset)
+        let layerY: CGFloat = ShortOpenedOffsets.textViewTopOffset
+            .sum(ShortOpenedOffsets.textViewHeight)
+            .sum(ShortOpenedOffsets.textViewBottomOffset)
+        inputBackgroundView.layer.addSublayer(separatorLineLayer)
+        separatorLineLayer.frame = .init(
+            x: ShortOpenedOffsets.textViewLeadingOffset,
+            y: layerY,
+            width: layerWidth,
+            height: ShortOpenedOffsets.separatorLineHeight)
+    }
+
+
+    @objc private func setKeyboardWillHide(_ notification: Notification) {
+        backgroundColor = Asset.hex424247.color
+        viewModel.viewState = .closed
+        viewModel.mainThreadActionsState = .showNavigationBar
+        viewModel.mainThreadActionsState = .updateHeight(
+            keyboardHeight: 0.0,
+            viewHeight: ClosedOffsets.viewHeight)
+        setClosedViewState()
+    }
+
+    private func setClosedViewState() {
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            guard let self = self else { return }
+            self.inputBackgroundView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                    .inset(ClosedOffsets.backgroundViewTopOffset)
+                make.leading.equalToSuperview()
+                    .inset(ClosedOffsets.backgroundViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .offset(-ClosedOffsets.backgroundViewTrailingOffset)
+                make.height.equalTo(ClosedOffsets.backgroundViewHeight)
+            }
+
+            self.foreignTextView.snp.remakeConstraints { make in
+                make.top.equalToSuperview()
+                    .offset(ClosedOffsets.textViewTopOffset)
+                make.leading.equalToSuperview()
+                    .inset(ClosedOffsets.textViewLeadingOffset)
+                make.trailing.equalToSuperview()
+                    .inset(-ClosedOffsets.textViewTrailingOffset)
+                make.height.equalTo(ClosedOffsets.textViewHeight)
+            }
+
+            self.fullInputButton.snp.remakeConstraints { make in
+                make.centerY.equalTo(self.inputBackgroundView)
+                make.trailing.equalToSuperview()
+                    .offset(-ClosedOffsets.fullInputButtonTrailingOffset)
+                make.height.width.equalTo(ClosedOffsets.fullInputButtonSize)
+            }
+
+            self.fullInputButton.alpha = 1
+            self.separatorLineLayer.isHidden = true
+            self.nativeTextView.alpha = 0
+            self.addWordButton.alpha = 0
+            self.layoutIfNeeded()
+        }
     }
 }
 
@@ -338,35 +472,3 @@ extension NewWordInputView: UITextViewDelegate {
     }
 }
 
-enum NewWordInputViewOffsets {
-    static let separatorLineHeight: CGFloat = 1.0
-    static let textViewTopOffset: CGFloat = 8.0
-    static let textViewBottomOffset: CGFloat = 12.0
-    static let textViewLeadingTrailingOffset: CGFloat = 16.0
-    static let textViewClosedHeight: CGFloat = 20.0
-    static let textViewOpenedHeight: CGFloat = 50.0
-    static let inputBackgroundViewClosedHeight: CGFloat = textViewTopOffset
-        .sum(textViewClosedHeight)
-        .sum(textViewBottomOffset)
-        .sum(separatorLineHeight)
-    static let inputBackgroundViewOpenedHeight: CGFloat = textViewTopOffset
-        .sum(textViewOpenedHeight)
-        .sum(textViewBottomOffset)
-        .sum(separatorLineHeight)
-        .sum(textViewBottomOffset)
-        .sum(textViewOpenedHeight)
-        .sum(textViewBottomOffset)
-    static let inputBackgroundViewTopOffset: CGFloat = 8.0
-    static let addWordButtonTopOffset: CGFloat = 12.0
-    static let addWordButtonHeight: CGFloat = 30.0
-    static let addWordButtonBottomOffset: CGFloat = 12.0
-    static let viewClosedBottomOffset: CGFloat = 20.0
-    static let inputViewLeadingOffset: CGFloat = 20.0
-    static let inputViewTrailingOffset: CGFloat = 60.0
-    static let addButtonOriginalWidth: CGFloat = 65.0
-    static let addButtonErrorWidth: CGFloat = 230.0
-    static let textFieldOpenTrailingOffset: CGFloat = 52.0
-    static let fullInputButtonOpenedTrailingOffset: CGFloat = 36.0
-    static let fullInputButtonClosedTrailingOffset: CGFloat = 20.0
-    static let fullInputButtonSize: CGFloat = 20.0
-}

@@ -41,8 +41,8 @@ final class WordListTableVC: UIViewController {
         return tableView
     }()
 
-    private lazy var newWordInputView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
-    private var mainThreadObserver: AnyCancellable?
+    private lazy var inputTextView: NewWordInputView = .init(viewModel: viewModel.inputTextViewModel)
+    private var observersManager = AnyCancellableManager<Observers>()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,8 +51,8 @@ final class WordListTableVC: UIViewController {
         setupViews()
         setupHeaderConstraints()
         setupCollectionAndInputViewConstraints()
-        setupObserver()
-        setKeyboardNotifications()
+        setupMainThreadObserver()
+        setupInputTextViewObserver()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -89,66 +89,18 @@ final class WordListTableVC: UIViewController {
         let inputViewHeight = Ternary.get(
             if: .value(viewModel.isAllWordsFolder),
             true: .value(0.0),
-            false: .value(viewModel.inputTextViewModel.getViewHeight(isOpened: false)))
+            false: .value(viewModel.inputTextViewModel.initialHeight))
         tableView.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(6)
             make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview().offset(-inputViewHeight)
         }
         if !viewModel.isAllWordsFolder {
-            view.addSubview(newWordInputView)
-            newWordInputView.snp.makeConstraints { make in
+            view.addSubview(inputTextView)
+            inputTextView.snp.makeConstraints { make in
                 make.bottom.leading.trailing.equalToSuperview()
                 make.height.equalTo(inputViewHeight)
             }
-        }
-    }
-
-    private func setKeyboardNotifications() {
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(setKeyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil)
-
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(setKeyboardWillHide),
-            name: UIResponder.keyboardWillHideNotification,
-            object: nil)
-    }
-
-    @objc private func setKeyboardWillShow(_ notification: Notification) {
-        viewModel.inputTextViewModel.mainThreadActionsState = .viewSelected
-        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else { return }
-
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else { return }
-            let inputViewOpenedHeight = self.viewModel.inputTextViewModel.getViewHeight(isOpened: true)
-            let inputViewHeightWithKeyboard = keyboardSize.height.sum(inputViewOpenedHeight)
-            self.newWordInputView.snp.updateConstraints { make in
-                make.height.equalTo(inputViewHeightWithKeyboard)
-            }
-
-            self.tableView.snp.updateConstraints { make in
-                make.bottom.equalToSuperview().offset(-inputViewHeightWithKeyboard)
-            }
-            self.view.layoutIfNeeded()
-        }
-    }
-
-    @objc private func setKeyboardWillHide(_ notification: Notification) {
-        viewModel.inputTextViewModel.mainThreadActionsState = .viewDeselected
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            guard let self = self else { return }
-            let inputViewClosedHeight = self.viewModel.inputTextViewModel.getViewHeight(isOpened: false)
-            self.newWordInputView.snp.updateConstraints { make in
-                make.height.equalTo(inputViewClosedHeight)
-            }
-            self.tableView.snp.updateConstraints { make in
-                make.bottom.equalToSuperview().offset(-inputViewClosedHeight)
-            }
-            self.view.layoutIfNeeded()
         }
     }
 
@@ -156,8 +108,8 @@ final class WordListTableVC: UIViewController {
         view.endEditing(true)
     }
 
-    private func setupObserver() {
-       mainThreadObserver = viewModel
+    private func setupMainThreadObserver() {
+       let mainThreadObserver = viewModel
             .$mainThreadActionsState
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state in
@@ -175,6 +127,39 @@ final class WordListTableVC: UIViewController {
                         }, completion: nil)
                 }
             }
+        observersManager.setValue(type: .mainThreadActionsState, value: mainThreadObserver)
+    }
+
+    private func setupInputTextViewObserver() {
+        let inputTextViewObserver = viewModel
+            .inputTextViewModel
+            .$mainThreadActionsState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                switch state {
+                case .subscriptionAction:
+                    break
+                case .updateHeight(
+                    let keyboardHeight,
+                    let viewHeight):
+                    UIView.animate(withDuration: 0.3) { [weak self] in
+                        guard let self = self else { return }
+                        self.tableView.snp.updateConstraints { make in
+                            make.bottom.equalToSuperview().offset(-viewHeight.sum(keyboardHeight))
+                        }
+                        self.inputTextView.snp.updateConstraints { make in
+                            make.height.equalTo(viewHeight+keyboardHeight)
+                        }
+                    }
+                case .hideNavigationBar:
+                    self?.navigationController?.navigationBar.isHidden = true
+                case .showNavigationBar:
+                    self?.navigationController?.navigationBar.isHidden = false
+                }
+            }
+        observersManager.setValue(
+            type: .inputTextView,
+            value: inputTextViewObserver)
     }
 
 }

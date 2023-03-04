@@ -12,36 +12,27 @@ import SwiftExtension
 final class NewWordInputViewModel {
     @Published var mainThreadActionsState: MainThreadActionsState = .subscriptionAction
     @Published var backgroundThreadActionsState: BackgroundThreadActionsState = .subscriptionAction
-
-    func getViewHeight(isOpened: Bool) -> CGFloat {
-        return Ternary.get(
-            if: .value(isOpened),
-            true: .func({
-                let height = NewWordInputViewOffsets.inputBackgroundViewTopOffset
-                    .sum(NewWordInputViewOffsets.inputBackgroundViewOpenedHeight)
-                    .sum(NewWordInputViewOffsets.addWordButtonTopOffset)
-                    .sum(NewWordInputViewOffsets.addWordButtonHeight)
-                    .sum(NewWordInputViewOffsets.addWordButtonBottomOffset)
-                return height
-            }),
-            false: .func({
-                let height = NewWordInputViewOffsets.inputBackgroundViewTopOffset
-                    .sum(NewWordInputViewOffsets.inputBackgroundViewClosedHeight)
-                    .sum(NewWordInputViewOffsets.viewClosedBottomOffset)
-                return height
-            }))
-    }
+    var viewState: ViewState = .closed
+    var keyboardHeight: CGFloat = 0.0
+    let initialHeight = NewWordInputView.ClosedOffsets.viewHeight
 }
 
 extension NewWordInputViewModel {
     enum MainThreadActionsState {
         case subscriptionAction
-        case viewSelected
-        case viewDeselected
+        case updateHeight(keyboardHeight: CGFloat, viewHeight: CGFloat)
+        case hideNavigationBar
+        case showNavigationBar
     }
 
     enum BackgroundThreadActionsState {
         case subscriptionAction
         case addedWord(WordsModelNonDB)
+    }
+
+    enum ViewState {
+        case closed
+        case shortOpened
+        case fullOpened
     }
 }
