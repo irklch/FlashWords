@@ -48,4 +48,5 @@ enum Images {
         systemName: "trash",
         withConfiguration: mediumConfig)?
         .withRenderingMode(.alwaysTemplate)
+    static let fullInput: UIImage? = UIImage(named: "fullInput")?.withRenderingMode(.alwaysTemplate)
 }
